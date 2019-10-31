@@ -11,7 +11,7 @@ class Signup extends Component {
 
   handleFormSubmit = event => {
     event.preventDefault();
-    API.signUpUser(this.state.username, this.state.email, this.state.password)
+    API.signUpUser(this.state.username, this.state.email, this.state.password, this.state.isOwner)
       .then(res => {
         // once the user has signed up
         // send them to the login page
@@ -21,10 +21,15 @@ class Signup extends Component {
   };
 
   handleChange = event => {
-    const {name, value} = event.target;
-    this.setState({
-      [name]: value
-    });
+    const { name, value } = event.target;
+    if (name === 'isOwner') {
+      this.setState({ isOwner: this.state ? !this.state.isOwner : true })
+    } else {
+      this.setState({
+        [name]: value
+      });
+    }
+    console.log(this.state);
   };
 
   render() {
@@ -67,6 +72,20 @@ class Signup extends Component {
                    autoComplete="new-password"
                    onChange={this.handleChange}/>
           </div>
+          <div className="form-group"> {/* form-check */}
+            <input
+              className="form-check-input"
+              name="isOwner"
+              type="checkbox"
+              value="true"
+              id="isOwner"
+              onChange={this.handleChange}
+            />
+            <label className="form-check-label" htmlFor="isOwner">
+              Is Owner
+            </label>
+          </div>
+
           <button type="submit" className="btn btn-primary">Submit</button>
         </form>
         <p><Link to="/login">Go to Login</Link></p>
