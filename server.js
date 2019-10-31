@@ -25,8 +25,14 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Old
+// const connectionString = process.env.MONGODB_URI || 'mongodb://localhost:27017/appDB';
+
+// New
+const connectionString = process.env.MONGODB_URI || 'mongodb://localhost:27017/appDB';
+
 mongoose
-  .connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/appDB', {useNewUrlParser: true, useCreateIndex: true})
+  .connect(connectionString, {useNewUrlParser: true, useCreateIndex: true})
   .then(() => console.log("MongoDB Connected!"))
   .catch(err => console.error(err));
 
