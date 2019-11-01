@@ -25,17 +25,16 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Old
-// const connectionString = process.env.MONGODB_URI || 'mongodb://localhost:27017/appDB';
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("client/build"));
+}
 
-// New
 const connectionString = process.env.MONGODB_URI || 'mongodb://localhost:27017/appDB';
 
 mongoose
   .connect(connectionString, {useNewUrlParser: true, useCreateIndex: true})
   .then(() => console.log("MongoDB Connected!"))
   .catch(err => console.error(err));
-
 
 // LOGIN ROUTE
 app.post('/api/login', (req, res) => {
@@ -65,20 +64,17 @@ app.get('/api/user/:id', isAuthenticated, (req, res) => {
 });
 
 app.get('/api/requests/:renteeId', isAuthenticated, (req, res) => {
-  console.log('Request for Requests', req.params.renteeId);
-  db.Request.find({renteeId: req.params.renteeId}).then(data => {
+  db.Request.find({ renteeId: req.params.renteeId }).then(data => {
     if(data) {
       res.json(data);
+      console.log('\nSERVER: Found requests', data);
     } else {
-      res.status(404).send({success: false, message: 'No user found'});
+      res.status(404).send({success: false, message: 'No requests found'});
     }
   }).catch(err => res.status(400).send(err));
 });
 
 // Serve up static assets (usually on heroku)
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static("client/build"));
-}
 
 app.get('/', isAuthenticated /* Using the express jwt MW here */, (req, res) => {
   res.send('You are authenticated'); //Sending some response when authenticated
