@@ -28,7 +28,7 @@ ReactDOM.render(
             <Route exact path="/login" component={Login} />
             <Route exact path="/signup" component={Signup} />
             <Route exact path="/profile" component={Profile} />
-            <Route exact path="/newrequest" component={NewRequest} />
+            <Route exact path="/newRequest" component={NewRequest} />
 
         </div>
     </Router>
