@@ -3,11 +3,11 @@ const Schema = mongoose.Schema;
 
 const OfferSchema = new Schema({
   requestId: {
-    type: ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'Request'
   },
   ownerId: {
-    type: ObjectId,
+    type: Schema.Types.ObjectId,
     required: true
   },
   price: {

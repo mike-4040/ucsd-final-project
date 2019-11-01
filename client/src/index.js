@@ -13,10 +13,9 @@ import Profile from './pages/Profile';
 import Signup from './pages/Signup';
 import Navbar from './components/Navbar';
 import NewRequest from './pages/NewRequest';
+import Rentee from './pages/Rentee';
 
-// Here is if we have an id_token in localStorage
 if(localStorage.getItem("id_token")) {
-  // then we will attach it to the headers of each request from react application via axios
   axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('id_token')}`;
 }
 
@@ -29,7 +28,7 @@ ReactDOM.render(
             <Route exact path="/signup" component={Signup} />
             <Route exact path="/profile" component={Profile} />
             <Route exact path="/newrequest" component={NewRequest} />
-
+            <Route exact path="/rentee" component={Rentee} />
         </div>
     </Router>
     , document.getElementById('root')
