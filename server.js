@@ -64,6 +64,17 @@ app.get('/api/user/:id', isAuthenticated, (req, res) => {
   }).catch(err => res.status(400).send(err));
 });
 
+app.get('/api/requests/:renteeId', isAuthenticated, (req, res) => {
+  console.log('Request for Requests', req.params.renteeId);
+  db.Request.find({renteeId: req.params.renteeId}).then(data => {
+    if(data) {
+      res.json(data);
+    } else {
+      res.status(404).send({success: false, message: 'No user found'});
+    }
+  }).catch(err => res.status(400).send(err));
+});
+
 // Serve up static assets (usually on heroku)
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));

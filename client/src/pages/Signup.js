@@ -7,7 +7,13 @@ class Signup extends Component {
   constructor() {
     super();
     this.Auth = new AuthService();
+    this.state = {
+      isOwner: false,
+      email: "",
+      username: ""
+    }
   }
+
 
   handleFormSubmit = event => {
     event.preventDefault();
@@ -22,17 +28,15 @@ class Signup extends Component {
 
   handleChange = event => {
     const { name, value } = event.target;
-    if (name === 'isOwner') {
-      this.setState({ isOwner: this.state ? !this.state.isOwner : true })
-    } else {
-      this.setState({
-        [name]: value
-      });
-    }
-    console.log(this.state);
+    if (name === 'isOwner')
+      this.setState({ isOwner: !this.state.isOwner })
+    else
+      this.setState({ [name]: value});
   };
 
+
   render() {
+    console.log(this.state)
     // go to home page after signup
     if (this.Auth.loggedIn()) {
       return <Redirect to="/" />

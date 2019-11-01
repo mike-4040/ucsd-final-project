@@ -15,5 +15,9 @@ export default {
   },
   newRequest: newRequest => {
     return axios.post("/api/request/", newRequest);
-  }
+  },
+
+  // Get an array of all requests of the Rentee
+  getRenteeReqs: renteeId => axios.get(`/api/requests/${renteeId}`)
+  
 };
