@@ -7,7 +7,10 @@ class Login extends Component {
     super();
     this.Auth = new AuthService();
   }
-
+  state = {
+    email:"",
+    password:""
+  };
   handleFormSubmit = event => {
     event.preventDefault();
 

@@ -84,6 +84,13 @@ app.get('/', isAuthenticated /* Using the express jwt MW here */, (req, res) => 
   res.send('You are authenticated'); //Sending some response when authenticated
 });
 
+//ROUTE FOR RENTEE NEW REQUEST
+app.post('/api/request/', isAuthenticated,(req, res) => {
+  console.log(req.body)
+  db.Request.create(req.body)
+    .then(data => res.json(data))
+    .catch(err =>res.status(400).json(err));
+});
 // Error handling
 app.use(function (err, req, res, next) {
   if (err.name === 'UnauthorizedError') { // Send the error rather than to show it on the console
