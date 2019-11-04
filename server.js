@@ -10,6 +10,8 @@ const PORT = process.env.PORT || 3001;
 const isAuthenticated = require("./config/isAuthenticated");
 const auth = require("./config/auth");
 
+const seed = require('./seed');
+
 // Setting CORS so that any website can
 // Access our API
 app.use((req, res, next) => {
@@ -32,7 +34,7 @@ if (process.env.NODE_ENV === "production") {
 const connectionString = process.env.MONGODB_URI || 'mongodb://localhost:27017/appDB';
 
 mongoose
-  .connect(connectionString, {useNewUrlParser: true, useCreateIndex: true})
+  .connect(connectionString, {useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true })
   .then(() => console.log("MongoDB Connected!"))
   .catch(err => console.error(err));
 
@@ -87,6 +89,30 @@ app.post('/api/request/', isAuthenticated,(req, res) => {
     .then(data => res.json(data))
     .catch(err =>res.status(400).json(err));
 });
+
+//ADMIN
+
+app.get('/admin/rentee', (req, res) => {
+  seed.addRentee();
+  res.send('Creating rentees');
+})
+
+app.get('/admin/request', (req, res) => {
+  seed.createAllReqests();
+  res.send('Creating Requests');
+})
+
+app.get('/admin/owner', (req, res) => {
+  seed.addOwner();
+  res.send('Creating Owners');
+})
+
+app.get('/admin/offer', (req, res) => {
+  seed.addOffers();
+  res.send('Creating Offers');
+})
+
+
 // Error handling
 app.use(function (err, req, res, next) {
   if (err.name === 'UnauthorizedError') { // Send the error rather than to show it on the console
