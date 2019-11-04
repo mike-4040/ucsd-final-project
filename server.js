@@ -98,7 +98,7 @@ app.get('/admin/rentee', (req, res) => {
 })
 
 app.get('/admin/request', (req, res) => {
-  seed.createAllReqests();
+  seed.addReqests();
   res.send('Creating Requests');
 })
 
