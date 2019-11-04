@@ -10,6 +10,8 @@ const PORT = process.env.PORT || 3001;
 const isAuthenticated = require("./config/isAuthenticated");
 const auth = require("./config/auth");
 
+const seed = require('./seed');
+
 // Setting CORS so that any website can
 // Access our API
 app.use((req, res, next) => {
@@ -25,15 +27,23 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Old
-// const connectionString = process.env.MONGODB_URI || 'mongodb://localhost:27017/appDB';
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("client/build"));
+}
 
+<<<<<<< HEAD
 // New
 const connectionString =
   process.env.MONGODB_URI || "mongodb://localhost:27017/appDB";
 
 mongoose
   .connect(connectionString, { useNewUrlParser: true, useCreateIndex: true })
+=======
+const connectionString = process.env.MONGODB_URI || 'mongodb://localhost:27017/appDB';
+
+mongoose
+  .connect(connectionString, {useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true })
+>>>>>>> 5e7c1690ad2cdc2df7e7983aebad184b28de32e9
   .then(() => console.log("MongoDB Connected!"))
   .catch(err => console.error(err));
 
@@ -66,6 +76,7 @@ app.get("/api/user/:id", isAuthenticated, (req, res) => {
     .catch(err => res.status(400).send(err));
 });
 
+<<<<<<< HEAD
 app.get("/api/requests/:renteeId", isAuthenticated, (req, res) => {
   db.Request.find({ renteeId: req.params.renteeId })
     .then(data => {
@@ -76,12 +87,20 @@ app.get("/api/requests/:renteeId", isAuthenticated, (req, res) => {
       }
     })
     .catch(err => res.status(400).send(err));
+=======
+app.get('/api/requests/:renteeId', isAuthenticated, (req, res) => {
+  db.Request.find({ renteeId: req.params.renteeId }).then(data => {
+    if(data) {
+      res.json(data);
+      console.log('\nSERVER: Found requests', data);
+    } else {
+      res.status(404).send({success: false, message: 'No requests found'});
+    }
+  }).catch(err => res.status(400).send(err));
+>>>>>>> 5e7c1690ad2cdc2df7e7983aebad184b28de32e9
 });
 
 // Serve up static assets (usually on heroku)
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static("client/build"));
-}
 
 app.get(
   "/",
@@ -132,6 +151,32 @@ app.post("/api/offers/", isAuthenticated, (req, res) => {
     .catch(err => res.status(400).json(err));
 });
 
+<<<<<<< HEAD
+=======
+//ADMIN
+
+app.get('/admin/rentee', (req, res) => {
+  seed.addRentee();
+  res.send('Creating rentees');
+})
+
+app.get('/admin/request', (req, res) => {
+  seed.addReqests();
+  res.send('Creating Requests');
+})
+
+app.get('/admin/owner', (req, res) => {
+  seed.addOwner();
+  res.send('Creating Owners');
+})
+
+app.get('/admin/offer', (req, res) => {
+  seed.addOffers();
+  res.send('Creating Offers');
+})
+
+
+>>>>>>> 5e7c1690ad2cdc2df7e7983aebad184b28de32e9
 // Error handling
 app.use(function(err, req, res, next) {
   if (err.name === "UnauthorizedError") {

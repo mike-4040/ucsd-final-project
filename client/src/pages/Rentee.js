@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import withAuth from './../components/withAuth';
 import API from './../utils/API';
-import { Link } from 'react-router-dom';
+import Table from '../components/Table'
 
 class Rentee extends Component {
 
@@ -11,17 +11,13 @@ class Rentee extends Component {
   };
 
   componentDidMount() {
-    API.getUser(this.props.user.id).then(res => {
-      this.setState({
-        username: res.data.username
-      })
-    });
+    API
+      .getUser(this.props.user.id)
+      .then(res => this.setState({ username: res.data.username }));
 
-    API.getRenteeReqs(this.props.user.id).then(res => {
-      this.setState({
-        requests: res.data.requests
-      })
-    });
+    API
+      .getRenteeReqs(this.props.user.id)
+      .then(res => this.setState({requests: res.data}));
   }
 // this method is to test request info page
   handleRequestClick = id => {
@@ -44,45 +40,9 @@ class Rentee extends Component {
         </div>
         <div className="row">
           <div className="col-sm-12">
-            <table className="table text-center table-hover ">
-              <thead>
-                <tr>
-                  <th scope="col">Items</th>
-                  <th scope="col">Initial price</th>
-                  <th scope="col">Current bid</th>
-                  <th scope="col">Bids</th>
-                  <th scope="col">Location</th>
-                  <th scope="col">When</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>9" long board</td>
-                  <td>$50</td>
-                  <td>$40</td>
-                  <td>5</td>
-                  <td>La Jolla Shores</td>
-                  <td>11:00am 11/12/2019 </td>
-                </tr>
-                <tr>
-                  <td>11" long board</td>
-                  <td>$80</td>
-                  <td>$50</td>
-                  <td>10</td>
-                  <td>Pacific Beach</td>
-                  <td>11:00am 11/12/2019 </td>
-                </tr>
-                <tr>
-                  <td>7" long board</td>
-                  <td>$40</td>
-                  <td>$30</td>
-                  <td>2</td>
-                  <td>Ocean Beach
-                            </td>
-                  <td>11:00am 11/12/2019 </td>
-                </tr>
-              </tbody>
-            </table>
+            {this.state.requests.length === 0
+              ? <h2>No requests</h2>
+              : <Table requests={this.state.requests} />}
           </div>
         </div>
         <br />
