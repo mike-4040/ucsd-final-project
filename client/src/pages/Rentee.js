@@ -23,11 +23,16 @@ class Rentee extends Component {
       })
     });
   }
+// this method is to test request info page
+  handleRequestClick = id => {
+    this.props.history.push(`/rentee-request/${id}`)
+  }
 
   render() {
-    console.log(this.state);
     return (
       <div className="container ">
+        {/* this button sends hardcoded id and relocate us to another page */}
+      <button onClick={()=> this.handleRequestClick("5dbcd95d8731ff5430bd228b")} className="btn btn-danger">open request</button>
         <br />
         <div className="row">
           <div className="col-sm-6 ">

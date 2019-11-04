@@ -13,11 +13,13 @@ export default {
       isOwner: isOwner
     });
   },
+  //Creates new request
   newRequest: newRequest => {
     return axios.post("/api/request/", newRequest);
   },
-
   // Get an array of all requests of the Rentee
-  getRenteeReqs: renteeId => axios.get(`/api/requests/${renteeId}`)
-  
+  getRenteeReqs: renteeId => axios.get(`/api/requests/${renteeId}`) ,
+  //Get an array of one request of Rentee
+  getSingleRequest: requestId => axios.get(`/api/request/${requestId}`),
+  getAllOffers: requestId => axios.get(`/api/offers/${requestId}`),
 };
