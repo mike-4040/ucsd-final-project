@@ -11,7 +11,7 @@ import axios from "axios";
 import Login from './pages/Login';
 import Profile from './pages/Profile';
 import Signup from './pages/Signup';
-import Navbar from './components/Navbar';
+// import Navbar from './components/Navbar';
 import NewRequest from './pages/NewRequest';
 import Rentee from './pages/Rentee';
 import owner from './pages/owner';
