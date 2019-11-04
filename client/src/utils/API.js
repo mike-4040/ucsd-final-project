@@ -18,6 +18,12 @@ export default {
   },
 
   // Get an array of all requests of the Rentee
-  getRenteeReqs: renteeId => axios.get(`/api/requests/${renteeId}`)
+  getRenteeReqs: renteeId => axios.get(`/api/requests/${renteeId}`),
+
+  //Get all requests for the owner
+  //-/api/requests/
+  getOwnerReqs: ()=> axios.get('/api/requests/')
+  //Get all reqs closed by owner
+  getOwnerClosedReqs: ()=> axios.get('api/owner/closedrequests')
   
 };

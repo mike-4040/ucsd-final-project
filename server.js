@@ -75,6 +75,23 @@ app.get('/api/requests/:renteeId', isAuthenticated, (req, res) => {
   }).catch(err => res.status(400).send(err));
 });
 
+
+app.get('/api/requests', isAuthenticated, (req, res) => {
+  // console.log('Request for Requests', req.params.ownerId);
+ // --  isAuthenticated,
+      if (!req.user.isOwner) {
+     return res.status(403).send('Must be an owner.')
+      }
+  
+  db.Request.find({closed: "false"}).then(data => {
+    if(data) {
+      res.json({requests: data});
+    } else {
+      res.status(404).send({success: false, message: 'No user found'});
+    }
+  }).catch(err => res.status(400).send(err));
+});
+
 // Serve up static assets (usually on heroku)
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
@@ -85,7 +102,7 @@ app.get('/', isAuthenticated /* Using the express jwt MW here */, (req, res) => 
 });
 
 //ROUTE FOR RENTEE NEW REQUEST
-app.post('/api/request/', isAuthenticated,(req, res) => {
+app.post('/api/requests', isAuthenticated,(req, res) => {
   console.log(req.body)
   db.Request.create(req.body)
     .then(data => res.json(data))
