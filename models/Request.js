@@ -37,6 +37,10 @@ const RequestSchema = new Schema({
   },
   priceFinal: {
     type: Number
+  },
+  winnerId:{
+    type: String,
+    default:"none"
   }
 }, opts);
 

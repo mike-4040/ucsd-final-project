@@ -68,7 +68,7 @@ class Login extends Component {
                   </div>
                   <div className="row mt-4">
                     <div className="col-sm-12">
-                      <button id="logIn" className="btn  btn-light m-1">
+                      <button type="submit" id="logIn" className="btn  btn-light m-1">
                         Log In
                       </button>{" "}
                       <span id="separator"> if you not registered yet go to </span>{" "}

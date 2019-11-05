@@ -14,6 +14,7 @@ import Signup from './pages/Signup';
 import Navbar from './components/Navbar';
 import NewRequest from './pages/NewRequest';
 import Rentee from './pages/Rentee';
+import Requestinfo from './pages/Requestinfo'
 
 if(localStorage.getItem("id_token")) {
   axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('id_token')}`;
@@ -29,6 +30,8 @@ ReactDOM.render(
             <Route exact path="/profile" component={Profile} />
             <Route exact path="/newRequest" component={NewRequest} />
             <Route exact path="/rentee" component={Rentee} />
+            <Route exact path="/rentee-request/:requestId" component={Requestinfo} />
+
         </div>
     </Router>
     , document.getElementById('root')

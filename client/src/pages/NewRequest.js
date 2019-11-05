@@ -3,6 +3,7 @@ import withAuth from "./../components/withAuth";
 import API from "./../utils/API";
 import { Link } from "react-router-dom";
 
+
 class NewRequest extends Component {
   state = {
     boardSize: "",
@@ -61,6 +62,7 @@ class NewRequest extends Component {
                     name="boardSize"
                     className="custom-select"
                     id="boardSize"
+                    required
                   >
                     <option defaultValue>Choose prefered size</option>
                     <option value='7"'>7"</option>
@@ -84,6 +86,7 @@ class NewRequest extends Component {
                     name="price"
                     id="price"
                     placeholder="$"
+                    required
                   />
                 </div>
               </div>
@@ -96,6 +99,7 @@ class NewRequest extends Component {
                     value={this.state.time}
                     onChange={this.handleChange}
                     type="datetime-local"
+                    max="3000-12-31T00:00"
                     className="form-control"
                     name="time"
                     id="time"
@@ -115,6 +119,7 @@ class NewRequest extends Component {
                     name="location"
                     className="custom-select"
                     id="location"
+                    required
                   >
                     <option defaultValue>Choose your location</option>
                     <option value="La Jolla Shores">La Jolla Shores</option>
@@ -131,7 +136,7 @@ class NewRequest extends Component {
                   <button type="submit" className="btn btn-primary">
                     Submit
                   </button>
-                  <Link to="/">
+                  <Link to="/rentee/">
                     <div className="btn btn-danger">Cancel</div>
                   </Link>
                 </div>
