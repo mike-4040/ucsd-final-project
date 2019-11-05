@@ -45,7 +45,6 @@ class RequestInfo extends Component {
   };
 
   componentDidMount() {
-    // console.log("this ons " + this.props.match.params.requestId)
     API.getSingleRequest(this.props.match.params.requestId).then(res => {
       this.setState({
         renteeId: res.data[0].renteeId,
@@ -70,13 +69,61 @@ class RequestInfo extends Component {
     });
   }
 
+  renderConfirmation() {
+
+    return (
+      <div className="row">
+        <div className="col-sm-12">
+          <h3>Confirmation:</h3>
+          <div className="card m-1 bg-light">
+            <div className="card-body d-flex justify-content-between">
+              <ul>
+                <li>
+                  Winner is {this.state.winner.username} with ${" "}
+                  {this.state.bestPrice} bid!
+                </li>
+                <li>
+                  {" "}
+                  {this.state.winner.username}, is going to provide you with{" "}
+                  {this.state.item} surf board on - {this.state.time} at -{" "}
+                  {this.state.location}
+                </li>
+                <li>
+                  {" "}
+                  You can contact {this.state.winner.username} by this email: -
+                  {this.state.winner.email}{" "}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  renderButtons (){
+    return ( 
+      <div className="row">
+      <div className="col-sm-12">
+        <button
+          onClick={() => this.acceptBid(this.props.match.params.requestId)}
+          className="btn btn-danger"
+        >
+          Accept bid
+        </button>
+        <button className="btn btn-primary ">Cancel request</button>
+      </div>
+    </div>
+
+    )
+  }
+
   render() {
     return (
       <div className="container ">
         <div className="row">
           <div className="col-sm-12">
             <br />
-            <button className="btn btn-danger">Back</button>
+            <button onClick={() => this.props.history.push("/rentee/")} className="btn btn-danger">Back</button>
           </div>
         </div>
         <div className="row">
@@ -115,40 +162,8 @@ class RequestInfo extends Component {
           </div>
         </div>
         <hr />
-        <div className="row">
-          <div className="col-sm-12">
-            <button
-              onClick={() => this.acceptBid(this.props.match.params.requestId)}
-              className="btn btn-danger"
-            >
-              Accept bid
-            </button>
-            <button className="btn btn-primary ">Cancel request</button>
-          </div>
-        </div>
       
-        <div className="row">
-          <div className="col-sm-12">
-            <h3>Confirmation:</h3>
-            <div className="card m-1 bg-light">
-              <div className="card-body d-flex justify-content-between">
-                <ul>
-                  <li>Winner is {this.state.winner.username} with $ {this.state.bestPrice} bid!</li>
-                  <li>
-                    {" "}
-                    {this.state.winner.username}, is going to provide you with {this.state.item} surf board
-                    on - {this.state.time} at - {this.state.location}
-                  </li>
-                  <li>
-                    {" "}
-                    You can contact {this.state.winner.username} by this email:
-                    -{this.state.winner.email}{" "}
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
+        {this.state.bestPrice ? this.renderConfirmation() : this.renderButtons()}
       </div>
     );
   }
