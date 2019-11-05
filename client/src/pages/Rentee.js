@@ -11,6 +11,7 @@ class Rentee extends Component {
   };
 
   componentDidMount() {
+    // console.log(this.props.user.id)
     API
       .getUser(this.props.user.id)
       .then(res => this.setState({ username: res.data.username }));
@@ -18,7 +19,7 @@ class Rentee extends Component {
     API
       .getRenteeReqs(this.props.user.id)
       .then(res => {
-        console.log(res);
+        // console.log(res);
         this.setState({
           requests: res.data
         })
@@ -34,7 +35,7 @@ class Rentee extends Component {
       <div className="container ">
         {/* this button sends hardcoded id and relocate us to another page */}
         {/* 5dbcd95d8731ff5430bd228b */}
-      <button onClick={()=> this.handleRequestClick("5dc098703e03a351a835c881")} className="btn btn-danger">open request</button>
+      <button onClick={()=> this.handleRequestClick("5dc098703e03a351a835c87f")} className="btn btn-danger">open request</button>
         <br />
         <div className="row">
           <div className="col-sm-6 ">

@@ -35,7 +35,11 @@ const connectionString =
   process.env.MONGODB_URI || "mongodb://localhost:27017/appDB";
 
 mongoose
-  .connect(connectionString, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true })
+  .connect(connectionString, {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useUnifiedTopology: true
+  })
   .then(() => console.log("MongoDB Connected!"))
   .catch(err => console.error(err));
 
@@ -56,39 +60,43 @@ app.post("/api/signup", (req, res) => {
 
 // Any route with isAuthenticated is protected and you need a valid token
 // to access
-app.get('/api/user/:id', isAuthenticated, (req, res) => {
-  db.User.findById(req.params.id).then(data => {
-    if (data) {
-      res.json(data);
-    } else {
-      res.status(404).send({ success: false, message: 'No user found' });
-    }
-  }).catch(err => res.status(400).send(err));
+app.get("/api/user/:id", isAuthenticated, (req, res) => {
+  db.User.findById(req.params.id)
+    .then(data => {
+      if (data) {
+        res.json(data);
+      } else {
+        res.status(404).send({ success: false, message: "No user found" });
+      }
+    })
+    .catch(err => res.status(400).send(err));
 });
 
-app.get('/api/requests/:renteeId', isAuthenticated, (req, res) => {
-  db.Request
-    .find({ renteeId: req.params.renteeId, closed: false })
-    .populate({ path: 'priceBest' })
+app.get("/api/requests/:renteeId", isAuthenticated, (req, res) => {
+  db.Request.find({ renteeId: req.params.renteeId, closed: false })
+    // .populate("priceBest")
+    .populate("offers")
     .then(renteeRequests => {
+      // console.log("IM HERE!!!!!"+ renteeRequests)
       if (!renteeRequests)
-        res.status(404).send({ success: false, message: 'No requests found' });
+        res.status(404).send({ success: false, message: "No requests found" });
       let requestsClean = renteeRequests.map(request => {
+        const bestOffer = request.bestOffer();
         return {
           _id: request._id,
           item: request.item,
           priceInitial: request.priceInitial,
           location: request.location,
           time: request.time,
-          priceBest: request.priceBest.price,
+          priceBest: bestOffer ? bestOffer.price : null,
           numberOffers: request.numberOffers
-        }
-      })
+        };
+      });
       res.json(requestsClean);
     })
     .catch(err => {
       console.log(err);
-      res.status(500).send(err)
+      res.status(500).send(err.message);
     });
 });
 
@@ -120,7 +128,6 @@ app.get('/api/requests/:renteeId', isAuthenticated, (req, res) => {
 //       })
 //     }
 
-
 // Serve up static assets (usually on heroku)
 
 app.get(
@@ -134,8 +141,12 @@ app.get(
 //ROUTE FOR RENTEE NEW REQUEST
 app.post("/api/request/", isAuthenticated, (req, res) => {
   db.Request.create(req.body)
-    .then(data => res.json(data))
-    .catch(err => res.status(400).json(err));
+    .then(data => {
+      res.json({ id: data._id });
+    })
+    .catch(err => {
+      res.status(400).send(err.message);
+    });
 });
 
 //ROUTE TO GET SINGLE REQUEST FROM DATABASE
@@ -237,10 +248,10 @@ app.use(function(err, req, res, next) {
 
 // Send every request to the React app
 // Define any API routes before this runs
-app.get("*", function (req, res) {
+app.get("*", function(req, res) {
   res.sendFile(path.join(__dirname, "./client/build/index.html"));
 });
 
-app.listen(PORT, function () {
+app.listen(PORT, function() {
   console.log(`🌎 ==> Server now on port ${PORT}!`);
 });
