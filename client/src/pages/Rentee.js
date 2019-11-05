@@ -1,28 +1,43 @@
 import React, { Component } from 'react';
 import withAuth from './../components/withAuth';
 import API from './../utils/API';
-import Table from '../components/Table'
+import OpenRequests from '../components/OpenRequests';
+import ClosedRequests from '../components/ClosedRequests';
 
 class Rentee extends Component {
 
   state = {
     username: "",
-    requests: []
+    requestsOpen: [],
+    requestsClosed: []
   };
 
   componentDidMount() {
+    // console.log(this.props.user.id)
     API
       .getUser(this.props.user.id)
       .then(res => this.setState({ username: res.data.username }));
 
     API
-      .getRenteeReqs(this.props.user.id)
-      .then(res => this.setState({requests: res.data}));
+      .getRenteeReqsOpen(this.props.user.id)
+      .then(res => this.setState({ requestsOpen: res.data }));
+    
+    API
+      .getRenteeReqsClosed(this.props.user.id)
+      .then(res => this.setState({ requestsClosed: res.data }));
+    
+  }
+  // this method is to test request info page
+  handleRequestClick = id => {
+    this.props.history.push(`/rentee-request/${id}`)
   }
 
   render() {
     return (
       <div className="container ">
+        {/* this button sends hardcoded id and relocate us to another page */}
+        {/* 5dbcd95d8731ff5430bd228b */}
+        <button onClick={() => this.handleRequestClick("5dc092ef0dcd19522876db33")} className="btn btn-danger">open request</button>
         <br />
         <div className="row">
           <div className="col-sm-6 ">
@@ -34,56 +49,27 @@ class Rentee extends Component {
         </div>
         <div className="row">
           <div className="col-sm-12">
-            {this.state.requests.length === 0
+            {this.state.requestsOpen.length === 0
               ? <h2>No requests</h2>
-              : <Table requests={this.state.requests} />}
+              : <OpenRequests requests={this.state.requestsOpen}/>}
           </div>
         </div>
         <br />
-          <div className="row">
-            <div className="col-sm-12">
-              <h1>My Complete request</h1>
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-sm-12">
-              <table className="table text-center table-hover ">
-                <thead>
-                  <tr>
-
-                    <th scope="col">Items</th>
-                    <th scope="col">Price</th>
-                    <th scope="col">Location</th>
-                    <th scope="col">Time</th>
-                    <th scope="col">Winner</th>
-                    <th scope="col">Contact</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>9" long board</td>
-                    <td>$50</td>
-                    <td>La Jolla Shores</td>
-                    <td>11:00am 11/12/2019 </td>
-                    <td>Kostas</td>
-                    <td>kostas@gmail.com</td>
-                  </tr>
-                  <tr>
-
-                    <td>11" long board</td>
-                    <td>$80</td>
-                    <td>Pacific Beach</td>
-                    <td>11:00am 11/12/2019 </td>
-                    <td>OldMan</td>
-                    <td>OldMan@gamil.com</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+        <div className="row">
+          <div className="col-sm-12">
+            <h1>My Complete request</h1>
           </div>
         </div>
+        <div className="row">
+          <div className="col-sm-12">
+            {this.state.requestsClosed.length === 0
+              ? <h2>No requests</h2>
+              : <ClosedRequests requests={this.state.requestsClosed} />}
+          </div>
+        </div>
+      </div>
     )
   }
 }
-      
+
 export default withAuth(Rentee);
