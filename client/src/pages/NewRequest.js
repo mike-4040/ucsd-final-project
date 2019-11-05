@@ -30,7 +30,7 @@ class NewRequest extends Component {
     };
     API
       .newRequest(newRequest)
-      .then(res => this.props.history.replace('/rentee/'))
+      .then(res => this.props.history.push('/rentee/'))
       .catch(err => alert(err));
   };
 
