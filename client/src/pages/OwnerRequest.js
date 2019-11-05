@@ -9,17 +9,25 @@ class OwnerRequest extends Component {
     componentDidMount() {
         API.getOwnerRequestById(this.props.match.params.requestId).then(res => {
             this.setState({ request: res.data.request || null })
-        }).catch(console.log)
+        })
 
     }
 
     render() {
-        console.log(this.props.match.params.requestId)
+        console.log(this.state.request)
         return (<div>
             <h1>Request Details Page</h1>
-            
-            
-
+            {!this.state.request ? 
+            <p>Nothing</p> :
+            (
+            <div>
+                <p>item is: {this.state.request.item}</p>
+                <p>priceInitial is: {this.state.request.priceInitial}</p>
+                <p>location is: {this.state.request.location}</p>
+                <p>Time is: {this.state.request.time}</p>
+            </div>
+            )
+        }
         </div>)
     }
 }
