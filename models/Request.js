@@ -39,8 +39,9 @@ const RequestSchema = new Schema({
     type: Number
   },
   winnerId:{
-    type: String,
-    default:"none"
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    default: null
   }
 }, opts);
 
@@ -50,12 +51,8 @@ RequestSchema
     localField: '_id',      // Find people where `localField`
     foreignField: 'requestId', // is equal to `foreignField`
     justOne: true,
-    options: { sort: { name: -1 }, limit: 1 }
+    options: { sort: { price: 1 }, limit: 1 }
   });
-
-// RequestSchema.virtual('bestPrice').get(function () {
-//   return mongoose.model('Offer').find({requestId: this._id}).sort({price: -1}).limit(1).select("price")
-// })
 
 RequestSchema
   .virtual('numberOffers', {

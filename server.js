@@ -66,7 +66,8 @@ app.get('/api/user/:id', isAuthenticated, (req, res) => {
   }).catch(err => res.status(400).send(err));
 });
 
-app.get('/api/requests/:renteeId', isAuthenticated, (req, res) => {
+// Open requests
+app.get('/api/requestsO/:renteeId', isAuthenticated, (req, res) => {
   db.Request
     .find({ renteeId: req.params.renteeId, closed: false })
     .populate({ path: 'priceBest' })
@@ -80,7 +81,7 @@ app.get('/api/requests/:renteeId', isAuthenticated, (req, res) => {
           priceInitial: request.priceInitial,
           location: request.location,
           time: request.time,
-          priceBest: request.priceBest.price,
+          priceBest: request.priceBest ? request.priceBest.price : null,
           numberOffers: request.numberOffers
         }
       })
@@ -92,34 +93,30 @@ app.get('/api/requests/:renteeId', isAuthenticated, (req, res) => {
     });
 });
 
-// let bestOffers = [];
-// // let results = []
-// renteeRequests.forEach(request => {
-//   // console.log(request)
-//   bestOffers.push(db.Offer
-//     .find({ requestId: request._id })
-//     .sort({ price: -1 })
-//     .limit(1)
-//     .then(result => {
-//       return result[0]
-//     })
-//     .catch(error => {
-//       console.log(error)
-//       return null
-//     })
-//   );
-// });
-// console.log(renteeRequests)
-// Promise
-//   .all(bestOffers)
-//   .then(bestOffers => {
-//     for (let i = 0; renteeRequests.length; i++) {
-//       results.push({
-//         ...renteeRequests[i].toObject(),
-//         minPrice: bestOffers[i] ? bestOffers[i].price : null
-//       })
-//     }
-
+app.get('/api/requestsC/:renteeId', isAuthenticated, (req, res) => {
+  db.Request
+    .find({ renteeId: req.params.renteeId, closed: true })
+    .then(renteeRequests => {
+      if (!renteeRequests)
+        res.status(404).send({ success: false, message: 'No requests found' });
+      let requestsClean = renteeRequests.map(request => {
+        return {
+          _id: request._id,
+          item: request.item,
+          priceInitial: request.priceInitial,
+          location: request.location,
+          time: request.time,
+          priceBest: request.priceBest ? request.priceBest.price : null,
+          numberOffers: request.numberOffers
+        }
+      })
+      res.json(requestsClean);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).send(err)
+    });
+});
 
 // Serve up static assets (usually on heroku)
 

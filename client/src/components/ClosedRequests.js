@@ -1,17 +1,18 @@
 import React from 'react';
 
-function OpenRequests({ requests }) {
+function ClosedRequests({ requests }) {
+  console.log('Table Props', requests[0].item);
 
   return (
     <table className="table text-center table-hover ">
       <thead>
         <tr>
           <th scope="col">Items</th>
-          <th scope="col">Initial price</th>
-          <th scope="col">Current bid</th>
-          <th scope="col">Bids</th>
+          <th scope="col">Price</th>
           <th scope="col">Location</th>
-          <th scope="col">When</th>
+          <th scope="col">Time</th>
+          <th scope="col">Winner</th>
+          <th scope="col">Contact</th>
         </tr>
       </thead>
       <tbody>
@@ -31,4 +32,4 @@ function OpenRequests({ requests }) {
   );
 }
 
-export default OpenRequests;
+export default ClosedRequests;
