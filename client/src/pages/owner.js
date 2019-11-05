@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
-import withAuth from './../components/withAuth';
-import API from './../utils/API';
+import withAuth from '../components/withAuth';
+import API from '../utils/API';
 import { Link } from 'react-router-dom';
 
 class Owner extends Component {
 
   state = {
     username: "",
-    requests: []
+    requests: [],
+    offers: []
   };
 
   componentDidMount() {
@@ -18,22 +19,27 @@ class Owner extends Component {
     });
 
     API.getOwnerReqs().then(res => {
-        console.log(res.data.requests)
+      console.log(res.data.requests)
       this.setState({
         requests: res.data.requests || []
       })
     }).catch(console.log);
+
+    API.getOwnerClosedReqs().then(res => {
+      console.log(res.data.offers)
+      this.setState({
+        offers: res.data.offers || []
+      })
+    }).catch(console.log);
+
   }
-  API.getOwnerClosedReqs().then(res => {
-    console.log(res.data.requests)
-  this.setState({
-    requests: res.data.requests || []
-  })
-}).catch(console.log);
-}
+  showreq = (requestId) => {
+    this.props.history.push(`/owner/requests/${requestId}`)
+  };
+
 
   render() {
-    console.log(this.state);
+    console.log(JSON.stringify(this.state, null, 2));
     return (
       <div className="container ">
         <br />
@@ -56,76 +62,58 @@ class Owner extends Component {
                   <th scope="col">When</th>
                 </tr>
               </thead>
-                            {/*{this.state.friends.map(friend => (
-          <FriendCard
-            clickFriend={this.clickFriend}
-            id={friend.id}
-            key={friend.id}
-            name={friend.name}
-            image={friend.image}
-            // occupation={friend.occupation}
-            // location={friend.location}
-          />
-              ))}*/}
               <tbody>
-                  {this.state.requests.map(request =>(
-                      <tr>
-                      <td>{request.item}</td>
-                      <td>{request.priceInitial}</td>
-                      <td>{request.location}</td>
-                      <td>{request.time} </td>
-                    </tr>
-                  ))}                
-              
+                {this.state.requests.map(request => (
+                  <tr key={request._id}
+                    onClick={() => this.showreq(request._id)}
+                  >
+                    <td>{request.item}</td>
+                    <td>{request.priceInitial}</td>
+                    <td>{request.location}</td>
+                    <td>{request.time} </td>
+                  </tr>
+                ))}
+
               </tbody>
             </table>
           </div>
         </div>
         <br />
-          <div className="row">
-            <div className="col-sm-12">
-              <h1>My Complete request</h1>
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-sm-12">
-              <table className="table text-center table-hover ">
-                <thead>
-                  <tr>
-
-                    <th scope="col">Items</th>
-                    <th scope="col">Price</th>
-                    <th scope="col">Location</th>
-                    <th scope="col">Time</th>
-                    <th scope="col">Winner</th>
-                    <th scope="col">Contact</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>9" long board</td>
-                    <td>$50</td>
-                    <td>La Jolla Shores</td>
-                    <td>11:00am 11/12/2019 </td>
-                    <td>Kostas</td>
-                    <td>kostas@gmail.com</td>
-                  </tr>
-                  <tr>
-
-                    <td>11" long board</td>
-                    <td>$80</td>
-                    <td>Pacific Beach</td>
-                    <td>11:00am 11/12/2019 </td>
-                    <td>OldMan</td>
-                    <td>OldMan@gamil.com</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+        <div className="row">
+          <div className="col-sm-12">
+            <h1>My Complete request</h1>
           </div>
         </div>
+        <div className="row">
+          <div className="col-sm-12">
+            <table className="table text-center table-hover ">
+              <thead>
+                <tr>
+                  <th scope="col">Items</th>
+                  <th scope="col">Price</th>
+                  <th scope="col">Location</th>
+                  <th scope="col">Time</th>
+                  {/* <th scope="col">Winner</th>
+                    <th scope="col">Contact</th> */}
+                </tr>
+              </thead>
+              <tbody>
+                {this.state.offers.map(closedOffers => (
+                  <tr>
+                    <td>{closedOffers.Items}</td>
+                    <td>{closedOffers.priceInitial}</td>
+                    <td>{closedOffers.location}</td>
+                    <td>{closedOffers.time}</td>
+                    {/* <td>closedReqs.kostas</td>
+                    <td>closedReqs.location.kostas@gmail.com</td> */}
+                  </tr>))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     )
   }
 }
-      
+
 export default withAuth(Owner);

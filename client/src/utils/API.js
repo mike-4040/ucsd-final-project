@@ -22,8 +22,9 @@ export default {
 
   //Get all requests for the owner
   //-/api/requests/
-  getOwnerReqs: ()=> axios.get('/api/requests/')
+  getOwnerReqs: ()=> axios.get('/api/requests/'),
   //Get all reqs closed by owner
-  getOwnerClosedReqs: ()=> axios.get('api/owner/closedrequests')
+  getOwnerClosedReqs: ()=> axios.get('api/owner/closedrequests'),
+  getOwnerRequestById: id => axios.get(`/api/owner/requests/${id}`)
   
 };

@@ -93,6 +93,24 @@ app.get('/api/requests', isAuthenticated, (req, res) => {
   }).catch(err => res.status(400).send(err));
 });
 
+//api/owner/closedrequests
+app.get('api/owner/closedrequests', isAuthenticated, (req, res) => {
+  // console.log('Request for Requests', req.params.ownerId);
+ // --  isAuthenticated,
+      if (!req.user.isOwner) {
+     return res.status(403).send('Must be an owner.')
+      }
+  
+  db.Offer.find({closed: "true"}).then(data => {
+    if(data) {
+      res.json({offers: data});
+    } else {
+      res.status(404).send({success: false, message: 'No user found'});
+    }
+  }).catch(err => res.status(400).send(err));
+});
+
+
 // Serve up static assets (usually on heroku)
 
 app.get('/', isAuthenticated /* Using the express jwt MW here */, (req, res) => {
@@ -106,6 +124,14 @@ app.post('/api/requests', isAuthenticated,(req, res) => {
     .then(data => res.json(data))
     .catch(err =>res.status(400).json(err));
 });
+
+//Route to view one request
+app.get('/api/owner/requests/:id',(req,res)=>{
+   //console.log(req.params.id)
+  db.Request.findById(req.params.id)
+  .then(data => res.json({request:data}))
+  .catch(err=>res.status(400).json(err))
+})
 
 //ADMIN
 
