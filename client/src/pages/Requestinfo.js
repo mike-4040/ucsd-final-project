@@ -10,18 +10,38 @@ class RequestInfo extends Component {
     priceInitial: "",
     location: "",
     time: "",
-    offers: []
+    offers: [],
+    winner: {},
+    bestPrice: ""
   };
 
-  handleChange = event => {
-    const { name, value } = event.target;
-    this.setState({
-      [name]: value
+  acceptBid = requestId => {
+    let minprice = 1000;
+    let bestOffer = {};
+    for (let i = 0; i < this.state.offers.length; i++) {
+      let price = this.state.offers[i].price;
+      if (price < minprice) {
+        minprice = price;
+        bestOffer = this.state.offers[i];
+      }
+    }
+    // bestOffer.minprice = minprice;
+    //getting winner info
+    API.getUser(bestOffer.ownerId).then(res => {
+      this.setState({
+        winner: res.data
+      });
     });
-  };
 
-  handleFormSubmit = event => {
-    event.preventDefault();
+    API.updateRequest(bestOffer).then(res => {
+      this.setState({
+        bestPrice: res.data.priceFinal
+      });
+    });
+
+    API.updateOffer(bestOffer).then(res => {
+      console.log(res.data);
+    });
   };
 
   componentDidMount() {
@@ -37,12 +57,11 @@ class RequestInfo extends Component {
     });
 
     API.getAllOffers(this.props.match.params.requestId).then(res => {
-      console.log(res.data)
+      // console.log(res.data)
       this.setState({
-        offers:res.data
+        offers: res.data
       });
     });
-
 
     API.getUser(this.props.user.id).then(res => {
       this.setState({
@@ -72,14 +91,11 @@ class RequestInfo extends Component {
             <div className="card m-1 bg-light">
               <div className="card-body">
                 <ul>
-                {this.state.offers.map(offer => (
-              <li key={offer._id}>${offer.price} {offer.ownerId} {offer.createdAt} </li>
-              
-            ))}
-                  {/* <li>$45 NewMans SurfShop 11:00 AM 11/12/2019</li>
-                  <li>$40 OldMans SurfShop 11:12 AM 11/12/2019</li>
-                  <li>$35 Kostas 11:14 AM 11/12/2019</li>
-                  <li>$30 Ringo Star 11:15 AM 11/12/2019</li> */}
+                  {this.state.offers.map(offer => (
+                    <li key={offer._id}>
+                      ${offer.price} {offer.ownerId} {offer.createdAt}{" "}
+                    </li>
+                  ))}
                 </ul>
               </div>
             </div>
@@ -101,8 +117,36 @@ class RequestInfo extends Component {
         <hr />
         <div className="row">
           <div className="col-sm-12">
-            <button className="btn btn-danger">Accept bid</button>
+            <button
+              onClick={() => this.acceptBid(this.props.match.params.requestId)}
+              className="btn btn-danger"
+            >
+              Accept bid
+            </button>
             <button className="btn btn-primary ">Cancel request</button>
+          </div>
+        </div>
+      
+        <div className="row">
+          <div className="col-sm-12">
+            <h3>Confirmation:</h3>
+            <div className="card m-1 bg-light">
+              <div className="card-body d-flex justify-content-between">
+                <ul>
+                  <li>Winner is {this.state.winner.username} with $ {this.state.bestPrice} bid!</li>
+                  <li>
+                    {" "}
+                    {this.state.winner.username}, is going to provide you with {this.state.item} surf board
+                    on - {this.state.time} at - {this.state.location}
+                  </li>
+                  <li>
+                    {" "}
+                    You can contact {this.state.winner.username} by this email:
+                    -{this.state.winner.email}{" "}
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
       </div>

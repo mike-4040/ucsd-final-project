@@ -18,8 +18,17 @@ export default {
     return axios.post("/api/request/", newRequest);
   },
   // Get an array of all requests of the Rentee
-  getRenteeReqs: renteeId => axios.get(`/api/requests/${renteeId}`) ,
+  getRenteeReqs: renteeId => axios.get(`/api/requests/${renteeId}`),
   //Get an array of one request of Rentee
   getSingleRequest: requestId => axios.get(`/api/request/${requestId}`),
+  //Getting all offers on single requestID
   getAllOffers: requestId => axios.get(`/api/offers/${requestId}`),
+
+  updateRequest: bestOffer => {
+   return axios.put("/api/request/", bestOffer);
+  },
+  updateOffer: bestOffer => {
+    return axios.put("/api/offer/", bestOffer);
+   }
+ 
 };

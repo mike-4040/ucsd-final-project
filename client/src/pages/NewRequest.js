@@ -28,17 +28,10 @@ class NewRequest extends Component {
       location: this.state.location,
       time: this.state.time
     };
-<<<<<<< HEAD
-    API.newRequest(newRequest).then(res => {
-      this.props.history.replace('/rentee/');
-    })
-    .catch(err => alert(err));
-=======
     API
       .newRequest(newRequest)
       .then(res => this.props.history.replace('/rentee/'))
       .catch(err => alert(err));
->>>>>>> 5e7c1690ad2cdc2df7e7983aebad184b28de32e9
   };
 
   componentDidMount() {
