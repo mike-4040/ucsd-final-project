@@ -48,31 +48,13 @@ const RequestSchema = new Schema(
   opts
 );
 
-RequestSchema.virtual("offers", {
-  ref: "Offer",
-  localField: "_id",
-  foreignField: "requestId",
-  justOne: false
+RequestSchema.virtual("priceBest", {
+  ref: "Offer", // The model to use
+  localField: "_id", // Find people where `localField`
+  foreignField: "requestId", // is equal to `foreignField`
+  justOne: true,
+  options: { sort: { price: 1 }, limit: 1 }
 });
-
-// RequestSchema.virtual("priceBest", {
-//   ref: "Offer", // The model to use
-//   localField: "_id", // Find people where `localField`
-//   foreignField: "requestId", // is equal to `foreignField`
-//   justOne: true
-// })
-
-RequestSchema.virtual("priceBest").get(function() {
-  return mongoose
-    .model("Offer")
-    .find({ requestId: this._id })
-    .sort({ price: 1 })
-    .limit(1);
-});
-
-// RequestSchema.virtual('bestPrice').get(function () {
-//   return mongoose.model('Offer').find({requestId: this._id}).sort({price: -1}).limit(1).select("price")
-// })
 
 RequestSchema.virtual("numberOffers", {
   ref: "Offer",
@@ -81,13 +63,9 @@ RequestSchema.virtual("numberOffers", {
   count: true
 });
 
-RequestSchema.pre("find", function() {
-  this.populate("numberOffers");
-});
-
 RequestSchema.methods.bestOffer = function() {
   if (this.get("offers").length === 0) {
-    return null
+    return null;
   }
   return this.get("offers").sort((a, b) => a.price - b.price)[0];
 };
