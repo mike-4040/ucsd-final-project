@@ -62,13 +62,15 @@ RequestSchema.virtual("numberOffers", {
   foreignField: "requestId",
   count: true
 });
-
-RequestSchema.methods.bestOffer = function() {
-  if (this.get("offers").length === 0) {
-    return null;
-  }
-  return this.get("offers").sort((a, b) => a.price - b.price)[0];
-};
+RequestSchema.pre("find", function() {
+  this.populate("numberOffers");
+});
+// RequestSchema.methods.bestOffer = function() {
+//   if (this.get("offers").length === 0) {
+//     return null;
+//   }
+//   return this.get("offers").sort((a, b) => a.price - b.price)[0];
+// };
 
 const Request = mongoose.model("Request", RequestSchema);
 

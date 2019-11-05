@@ -33,6 +33,7 @@ class Rentee extends Component {
   }
 
   render() {
+    console.log(this.state.requestsOpen)
     return (
       <div className="container ">
         {/* this button sends hardcoded id and relocate us to another page */}
