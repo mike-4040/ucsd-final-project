@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Table({ requests }) {
+function OpenRequests({ requests }) {
   console.log('Table Props', requests[0].item);
 
   return (
@@ -20,8 +20,8 @@ function Table({ requests }) {
           <tr key={request._id}>
             <td>{request.item}</td>
             <td>{request.priceInitial}</td>
-            <td>Current bid</td>
-            <td>Bids</td>
+            <td>{request.priceBest}</td>
+            <td>{request.numberOffers}</td>
             <td>{request.location}</td>
             <td>{request.time}</td>
           </tr>
@@ -32,6 +32,4 @@ function Table({ requests }) {
   );
 }
 
-export default Table;
-
-
+export default OpenRequests;
