@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+const opts = { toJSON: { virtuals: true } };
+
 const RequestSchema = new Schema({
   renteeId: {
     type: Schema.Types.ObjectId,
@@ -36,7 +38,32 @@ const RequestSchema = new Schema({
   priceFinal: {
     type: Number
   }
-});
+}, opts);
+
+RequestSchema
+  .virtual('priceBest', {
+    ref: 'Offer',           // The model to use
+    localField: '_id',      // Find people where `localField`
+    foreignField: 'requestId', // is equal to `foreignField`
+    justOne: true,
+    options: { sort: { name: -1 }, limit: 1 }
+  });
+
+// RequestSchema.virtual('bestPrice').get(function () {
+//   return mongoose.model('Offer').find({requestId: this._id}).sort({price: -1}).limit(1).select("price")
+// })
+
+RequestSchema
+  .virtual('numberOffers', {
+    ref: 'Offer',
+    localField: '_id',
+    foreignField: 'requestId',
+    count: true
+  });
+
+RequestSchema.pre('find', function() {
+    this.populate('numberOffers');
+  });
 
 const Request = mongoose.model('Request', RequestSchema);
 
