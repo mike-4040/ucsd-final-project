@@ -172,12 +172,7 @@ app.get(
 );
 
 //ROUTE FOR RENTEE NEW REQUEST
-<<<<<<< HEAD
-app.post('/api/requests', isAuthenticated,(req, res) => {
-  console.log(req.body)
-=======
 app.post("/api/request/", isAuthenticated, (req, res) => {
->>>>>>> c96b57fda41929008b37fe19916264efa0cb82ee
   db.Request.create(req.body)
     .then(data => {
       res.json({ id: data._id });

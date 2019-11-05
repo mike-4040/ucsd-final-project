@@ -14,12 +14,9 @@ import Signup from './pages/Signup';
 import Navbar from './components/Navbar';
 import NewRequest from './pages/NewRequest';
 import Rentee from './pages/Rentee';
-<<<<<<< HEAD
 import Owner from './pages/Owner';
 import OwnerRequest from './pages/OwnerRequest';
-=======
-import Requestinfo from './pages/Requestinfo'
->>>>>>> c96b57fda41929008b37fe19916264efa0cb82ee
+import RequestInfo from './pages/RequestInfo';
 
 if (localStorage.getItem("id_token")) {
     axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('id_token')}`;
@@ -35,13 +32,10 @@ ReactDOM.render(
             <Route exact path="/profile" component={Profile} />
             <Route exact path="/newRequest" component={NewRequest} />
             <Route exact path="/rentee" component={Rentee} />
-<<<<<<< HEAD
             <Route exact path="/owner" component={Owner} />
             <Route exact path="/owner/requests/:requestId" component={OwnerRequest} />
-=======
-            <Route exact path="/rentee-request/:requestId" component={Requestinfo} />
+            <Route exact path="/rentee-request/:requestId" component={RequestInfo} />
 
->>>>>>> c96b57fda41929008b37fe19916264efa0cb82ee
         </div>
     </Router>
     , document.getElementById('root')
