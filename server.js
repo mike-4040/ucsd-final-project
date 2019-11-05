@@ -82,7 +82,7 @@ app.get('/api/requestsO/:renteeId', isAuthenticated, (req, res) => {
       if (!renteeRequests)
         res.status(404).send({ success: false, message: "No requests found" });
       let requestsClean = renteeRequests.map(request => {
-        const bestOffer = request.bestOffer();
+        // const bestOffer = request.bestOffer();
         return {
           _id: request._id,
           item: request.item,
