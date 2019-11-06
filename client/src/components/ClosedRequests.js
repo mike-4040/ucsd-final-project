@@ -1,8 +1,6 @@
-import React from 'react';
+import React from "react";
 
-function ClosedRequests({ requests }) {
-  console.log('Table Props', requests[0].item);
-
+function ClosedRequests({ requests, handler }) {
   return (
     <table className="table text-center table-hover ">
       <thead>
@@ -16,17 +14,16 @@ function ClosedRequests({ requests }) {
         </tr>
       </thead>
       <tbody>
-        {requests.map(request =>
-          <tr key={request._id}>
+        {requests.map(request => (
+          <tr key={request._id} onClick={() => handler(request._id)}>
             <td>{request.item}</td>
-            <td>{request.priceInitial}</td>
-            <td>{request.priceBest}</td>
-            <td>{request.numberOffers}</td>
+            <td>{request.priceFinal}</td>
             <td>{request.location}</td>
             <td>{request.time}</td>
+            <td>{request.winnerName}</td>
+            <td>{request.winnerEmail}</td>
           </tr>
-        )
-        }
+        ))}
       </tbody>
     </table>
   );

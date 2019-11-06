@@ -8,21 +8,16 @@ class Login extends Component {
     this.Auth = new AuthService();
   }
   state = {
-    email:"",
-    password:""
+    email: "",
+    password: ""
   };
+
   handleFormSubmit = event => {
     event.preventDefault();
 
     this.Auth.login(this.state.email, this.state.password)
-      .then(res => {
-        // once user is logged in
-        // take them to their profile page
-        this.props.history.replace(`/profile`);
-      })
-      .catch(err => {
-        alert(err.response.data.message);
-      });
+      .then(res => window.location.replace(res.data.user.isOwner ? "/owner" : "/rentee"))
+      .catch(err => alert(err.response.data.message));
   };
 
   handleChange = event => {
@@ -73,9 +68,9 @@ class Login extends Component {
                       </button>{" "}
                       <span id="separator"> if you not registered yet go to </span>{" "}
                       <Link to="/signup">
-                      <button id="signUp" className="btn  btn-light m-1">
-                        Sign up
-                      </button>
+                        <button id="signUp" className="btn  btn-light m-1">
+                          Sign up
+                        </button>
                       </Link>
                     </div>
                   </div>
@@ -85,33 +80,6 @@ class Login extends Component {
           </div>
         </div>
       </div>
-      // <div className="container">
-      //   <h1>Login</h1>
-      //   <form onSubmit={this.handleFormSubmit}>
-      //     <div className="form-group">
-      //       <label htmlFor="email">Email address:</label>
-      //       <input className="form-control"
-      //              placeholder="Email goes here..."
-      //              name="email"
-      //              type="email"
-      //              id="email"
-      //              autoComplete="email"
-      //              onChange={this.handleChange}/>
-      //     </div>
-      //     <div className="form-group">
-      //       <label htmlFor="pwd">Password:</label>
-      //       <input className="form-control"
-      //              placeholder="Password goes here..."
-      //              name="password"
-      //              type="password"
-      //              id="pwd"
-      //              autoComplete="current-password"
-      //              onChange={this.handleChange}/>
-      //     </div>
-      //     <button type="submit" className="btn btn-primary">Submit</button>
-      //   </form>
-      //   <p><Link to="/signup">Go to Signup</Link></p>
-      // </div>
     );
   }
 }

@@ -11,7 +11,6 @@ const isAuthenticated = require("./config/isAuthenticated");
 const auth = require("./config/auth");
 
 const seed = require("./seed");
-
 // Setting CORS so that any website can
 // Access our API
 app.use((req, res, next) => {
@@ -78,7 +77,7 @@ app.get('/api/requestsO/:renteeId', isAuthenticated, (req, res) => {
     .find({ renteeId: req.params.renteeId, closed: false })
     .populate({ path: 'priceBest' })
     .then(renteeRequests => {
-      // console.log("IM HERE!!!!!"+ renteeRequests)
+      // console.log("IM HERE!!!!!"+ renteeRequests[0].priceBest)
       if (!renteeRequests)
         res.status(404).send({ success: false, message: "No requests found" });
       let requestsClean = renteeRequests.map(request => {
@@ -104,18 +103,20 @@ app.get('/api/requestsO/:renteeId', isAuthenticated, (req, res) => {
 app.get('/api/requestsC/:renteeId', isAuthenticated, (req, res) => {
   db.Request
     .find({ renteeId: req.params.renteeId, closed: true })
-    .then(renteeRequests => {
-      if (!renteeRequests)
+    .populate({ path: 'winnerId', select: 'username email'})
+    .then(requests => {
+      if (!requests)
         res.status(404).send({ success: false, message: 'No requests found' });
-      let requestsClean = renteeRequests.map(request => {
+      let requestsClean = requests.map(request => {
         return {
           _id: request._id,
           item: request.item,
           priceInitial: request.priceInitial,
           location: request.location,
           time: request.time,
-          priceBest: request.priceBest ? request.priceBest.price : null,
-          numberOffers: request.numberOffers
+          winnerName: request.winnerId.username,
+          winnerEmail: request.winnerId.email,
+          priceFinal: request.priceFinal
         }
       })
       res.json(requestsClean);
@@ -130,9 +131,9 @@ app.get('/api/requestsC/:renteeId', isAuthenticated, (req, res) => {
 app.get('/api/requests', isAuthenticated, (req, res) => {
   // console.log('Request for Requests', req.params.ownerId);
  // --  isAuthenticated,
-      if (!req.user.isOwner) {
+  if (!req.user.isOwner) {
      return res.status(403).send('Must be an owner.')
-      }
+    }
   
   db.Request.find({closed: "false"}).then(data => {
     if(data) {
@@ -144,7 +145,7 @@ app.get('/api/requests', isAuthenticated, (req, res) => {
 });
 
 //api/owner/closedrequests
-app.get('api/owner/closedrequests', isAuthenticated, (req, res) => {
+app.get('/api/owner/closedrequests', isAuthenticated, (req, res) => {
   // console.log('Request for Requests', req.params.ownerId);
  // --  isAuthenticated,
       if (!req.user.isOwner) {
@@ -159,7 +160,6 @@ app.get('api/owner/closedrequests', isAuthenticated, (req, res) => {
     }
   }).catch(err => res.status(400).send(err));
 });
-
 
 // Serve up static assets (usually on heroku)
 
