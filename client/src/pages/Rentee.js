@@ -38,14 +38,14 @@ class Rentee extends Component {
       <div className="container ">
         {/* this button sends hardcoded id and relocate us to another page */}
         {/* 5dbcd95d8731ff5430bd228b */}
-        <button onClick={() => this.handleRequestClick("5dc092ef0dcd19522876db33")} className="btn btn-danger">open request</button>
+        <button onClick={() => this.handleRequestClick("5dc098703e03a351a835c88e")} className="btn btn-danger">open request</button>
         <br />
         <div className="row">
           <div className="col-sm-6 ">
             <h1>My requests</h1>
           </div>
           <div className="col-sm-6 text-right">
-            <button className="btn btn-danger">Create new request</button>
+            <button onClick={() => this.props.history.push("/newRequest")} className="btn btn-danger">Create new request</button>
           </div>
         </div>
         <div className="row">

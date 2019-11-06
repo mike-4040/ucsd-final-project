@@ -14,7 +14,7 @@ import Signup from './pages/Signup';
 import Navbar from './components/Navbar';
 import NewRequest from './pages/NewRequest';
 import Rentee from './pages/Rentee';
-import Owner from './pages/Owner';
+import Owner from './pages/Owner'
 import OwnerRequest from './pages/OwnerRequest';
 import RequestInfo from './pages/RequestInfo';
 

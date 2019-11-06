@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import withAuth from "./../components/withAuth";
 import API from "./../utils/API";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 
 class RequestInfo extends Component {
   state = {
@@ -12,7 +12,8 @@ class RequestInfo extends Component {
     time: "",
     offers: [],
     winner: {},
-    bestPrice: ""
+    bestPrice: "",
+    closed: false
   };
 
   acceptBid = requestId => {
@@ -25,7 +26,6 @@ class RequestInfo extends Component {
         bestOffer = this.state.offers[i];
       }
     }
-    // bestOffer.minprice = minprice;
     //getting winner info
     API.getUser(bestOffer.ownerId).then(res => {
       this.setState({
@@ -42,17 +42,20 @@ class RequestInfo extends Component {
     API.updateOffer(bestOffer).then(res => {
       console.log(res.data);
     });
+    this.setState({
+      isClosed:true
+    });
   };
 
   componentDidMount() {
-    // console.log("this ons " + this.props.match.params.requestId)
     API.getSingleRequest(this.props.match.params.requestId).then(res => {
       this.setState({
         renteeId: res.data[0].renteeId,
         item: res.data[0].item,
         priceInitial: res.data[0].priceInitial,
         location: res.data[0].location,
-        time: res.data[0].time
+        time: res.data[0].time,
+        closed: res.data[0].closed
       });
     });
 
@@ -70,13 +73,61 @@ class RequestInfo extends Component {
     });
   }
 
+  renderConfirmation() {
+
+    return (
+      <div className="row">
+        <div className="col-sm-12">
+          <h3>Confirmation:</h3>
+          <div className="card m-1 bg-light">
+            <div className="card-body d-flex justify-content-between">
+              <ul>
+                <li>
+                  Winner is {this.state.winner.username} with ${" "}
+                  {this.state.bestPrice} bid!
+                </li>
+                <li>
+                  {" "}
+                  {this.state.winner.username}, is going to provide you with{" "}
+                  {this.state.item} surf board on - {this.state.time} at -{" "}
+                  {this.state.location}
+                </li>
+                <li>
+                  {" "}
+                  You can contact {this.state.winner.username} by this email: -
+                  {this.state.winner.email}{" "}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  renderButtons (){
+    return ( 
+      <div className="row">
+      <div className="col-sm-12">
+        <button
+          onClick={() => this.acceptBid(this.props.match.params.requestId)}
+          className="btn btn-danger"
+        >
+          Accept bid
+        </button>
+        <button className="btn btn-primary ">Cancel request</button>
+      </div>
+    </div>
+
+    )
+  }
+
   render() {
     return (
       <div className="container ">
         <div className="row">
           <div className="col-sm-12">
             <br />
-            <button className="btn btn-danger">Back</button>
+            <button onClick={() => this.props.history.push("/rentee/")} className="btn btn-danger">Back</button>
           </div>
         </div>
         <div className="row">
@@ -115,40 +166,8 @@ class RequestInfo extends Component {
           </div>
         </div>
         <hr />
-        <div className="row">
-          <div className="col-sm-12">
-            <button
-              onClick={() => this.acceptBid(this.props.match.params.requestId)}
-              className="btn btn-danger"
-            >
-              Accept bid
-            </button>
-            <button className="btn btn-primary ">Cancel request</button>
-          </div>
-        </div>
       
-        <div className="row">
-          <div className="col-sm-12">
-            <h3>Confirmation:</h3>
-            <div className="card m-1 bg-light">
-              <div className="card-body d-flex justify-content-between">
-                <ul>
-                  <li>Winner is {this.state.winner.username} with $ {this.state.bestPrice} bid!</li>
-                  <li>
-                    {" "}
-                    {this.state.winner.username}, is going to provide you with {this.state.item} surf board
-                    on - {this.state.time} at - {this.state.location}
-                  </li>
-                  <li>
-                    {" "}
-                    You can contact {this.state.winner.username} by this email:
-                    -{this.state.winner.email}{" "}
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
+        {this.state.closed ? this.renderConfirmation() : this.renderButtons()}
       </div>
     );
   }
