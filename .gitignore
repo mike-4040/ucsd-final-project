@@ -65,3 +65,6 @@ typings/
 
 # VS Code
 .vscode/
+
+#Sendgrig
+sendgrid.env
