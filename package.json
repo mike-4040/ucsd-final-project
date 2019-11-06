@@ -22,7 +22,9 @@
     "nodemon": "^1.19.4"
   },
   "dependencies": {
+    "@sendgrid/mail": "^6.4.0",
     "bcrypt-nodejs": "0.0.3",
+    "cron": "^1.7.2",
     "dotenv": "^8.2.0",
     "express": "^4.16.4",
     "express-jwt": "^5.3.1",
