@@ -14,10 +14,12 @@ import Signup from './pages/Signup';
 import Navbar from './components/Navbar';
 import NewRequest from './pages/NewRequest';
 import Rentee from './pages/Rentee';
-import Requestinfo from './pages/Requestinfo'
+import Owner from './pages/Owner';
+import OwnerRequest from './pages/OwnerRequest';
+import RequestInfo from './pages/RequestInfo';
 
-if(localStorage.getItem("id_token")) {
-  axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('id_token')}`;
+if (localStorage.getItem("id_token")) {
+    axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('id_token')}`;
 }
 
 ReactDOM.render(
@@ -30,7 +32,9 @@ ReactDOM.render(
             <Route exact path="/profile" component={Profile} />
             <Route exact path="/newRequest" component={NewRequest} />
             <Route exact path="/rentee" component={Rentee} />
-            <Route exact path="/rentee-request/:requestId" component={Requestinfo} />
+            <Route exact path="/owner" component={Owner} />
+            <Route exact path="/owner/requests/:requestId" component={OwnerRequest} />
+            <Route exact path="/rentee-request/:requestId" component={RequestInfo} />
 
         </div>
     </Router>
