@@ -1,7 +1,15 @@
+// 
 import React, { Component } from "react";
-import API from "../utils/API";
+import withAuth from "./../components/withAuth";
+import API from "./../utils/API";
+import { Link } from "react-router-dom";
 
 class OwnerRequest extends Component {
+  // constructor() {
+  //   super();
+  //   this.Auth = new AuthService();
+  // }
+
   state = {
     request: null,
     offers: [],
@@ -14,29 +22,35 @@ class OwnerRequest extends Component {
     });
   };
 
-
-
-  submitNewOffer =() =>{
-      console.log(this.props.user.id)
+  submitNewOffer =() => {
+      // object for new offer
     let objNewOffer ={
         requestId: this.props.match.params.requestId,
-        //ownerId: 
+        ownerId: this.props.user.id,
+        price: this.state.newOffer
     }
     // API.
+    API.newOffer(objNewOffer).then(res=>{this.fetchOffers()})
   }
 
-  componentDidMount() {
-    API.getOwnerRequestById(this.props.match.params.requestId).then(res => {
-      this.setState({ request: res.data.request || null });
-    });
-
+  fetchOffers() {
     API.getAllOffers(this.props.match.params.requestId).then(res => {
       this.setState({ offers: res.data || [] });
     });
   }
 
+  componentDidMount() {
+
+    API.getOwnerRequestById(this.props.match.params.requestId).then(res => {
+      this.setState({ request: res.data.request || null });
+    });
+
+    this.fetchOffers()
+  }
+
   render() {
-    console.log(this.state.request);
+    // console.log(this.state.request);
+    console.log('User ID', this.props.user.id)
     return (
       <div>
         <h1>Request Details Page</h1>
@@ -49,12 +63,19 @@ class OwnerRequest extends Component {
                     //     <p>priceInitial is: {this.state.request.priceInitial}</p>
                     //     <p>location is: {this.state.request.location}</p>
                     //     <p>Time is: {this.state.request.time}</p>
-                    // </div> */}
+                    // </div>
+                    
+                    <button
+             onClick={() => this.props.history.push("/rentee/")}
+             className="btn btn-danger"
+           >
+             Back
+           </button>*/}
 
             <div class="row">
               <div class="col-sm-12">
                 <br />
-                <button class="btn btn-danger">back</button>
+                <button class="btn btn-danger" onClick={() => this.props.history.push("/owner/")} >back</button>
               </div>
             </div>
             <br />
@@ -63,7 +84,7 @@ class OwnerRequest extends Component {
                 <h1>Make a Bid!</h1>
               </div>
               <div class="col-sm-6 text-right">
-                <h1>#1</h1>
+                <h1></h1>
               </div>
             </div>
             <hr />
@@ -123,7 +144,7 @@ class OwnerRequest extends Component {
                     id="button-addon1"
                     onClick={() => this.submitNewOffer()}
                   >
-                    } > Make an offer
+                     > Make an offer
                   </button>
                 </div>
               </div>
@@ -135,4 +156,4 @@ class OwnerRequest extends Component {
   }
 }
 
-export default OwnerRequest;
+export default withAuth(OwnerRequest);

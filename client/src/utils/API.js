@@ -40,7 +40,7 @@ export default {
   // Get all offers made for a req by Owner
   getOffersMade: requestId => axios.get(`/api/offers`),
   // Submit New Offer
-  newOffer: 
+  newOffer: (newOffer) => {return axios.post('/api/offer',newOffer)},
 
   updateRequest: bestOffer => {
    return axios.put("/api/request/", bestOffer);

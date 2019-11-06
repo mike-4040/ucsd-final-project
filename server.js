@@ -161,6 +161,18 @@ app.get('/api/owner/closedrequests', isAuthenticated, (req, res) => {
   }).catch(err => res.status(400).send(err));
 });
 
+//Owner makes New Offer
+//('/api/offer',newOffer
+app.post("/api/offer/", isAuthenticated, (req, res) => {
+  db.Offer.create(req.body)
+    .then(data => {
+      res.json(data);
+    })
+    .catch(err => {
+      res.status(400).send(err.message);
+    });
+ });
+
 // Serve up static assets (usually on heroku)
 
 app.get(
