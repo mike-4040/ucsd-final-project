@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import withAuth from "./../components/withAuth";
+import Card from "../components/Card";
 import API from "./../utils/API";
 // import { Link } from "react-router-dom";
 
@@ -11,12 +12,13 @@ class RequestInfo extends Component {
     location: "",
     time: "",
     offers: [],
-    winner: {},
     bestPrice: "",
-    closed: false
+    closed: false,
+    winnerName: "",
+    winnerEmail: ""
   };
 
-  acceptBid = requestId => {
+  acceptBid = () => {
     let minprice = 1000;
     let bestOffer = {};
     for (let i = 0; i < this.state.offers.length; i++) {
@@ -27,9 +29,10 @@ class RequestInfo extends Component {
       }
     }
     //getting winner info
-    API.getUser(bestOffer.ownerId).then(res => {
+    API.getUser(bestOffer.ownerId).then(response => {
       this.setState({
-        winner: res.data
+        winnerEmail: response.data.email,
+        winnerName: response.data.username
       });
     });
 
@@ -39,25 +42,39 @@ class RequestInfo extends Component {
       });
     });
 
-    API.updateOffer(bestOffer).then(res => {
-      console.log(res.data);
-    });
+    API.updateOffer(bestOffer).then(res => {});
     this.setState({
-      isClosed: true
+      closed: true
     });
   };
 
   componentDidMount() {
     API.getSingleRequest(this.props.match.params.requestId).then(res => {
-      console.log(res.data);
+      if (res.data[0].closed) {
+        API.getUser(res.data[0].winnerId).then(response => {
+          this.setState({
+            renteeId: res.data[0].renteeId,
+            item: res.data[0].item,
+            priceInitial: res.data[0].priceInitial,
+            location: res.data[0].location,
+            time: res.data[0].time,
+            closed: res.data[0].closed,
+            bestPrice: res.data[0].priceFinal,
+            winnerEmail: response.data.email,
+            winnerName: response.data.username
+          });
+        });
+      }
       this.setState({
         renteeId: res.data[0].renteeId,
         item: res.data[0].item,
         priceInitial: res.data[0].priceInitial,
         location: res.data[0].location,
         time: res.data[0].time,
-        closed: res.data[0].closed
+        closed: res.data[0].closed,
+        bestPrice: res.data[0].priceFinal
       });
+      // console.log(res.data)
     });
 
     API.getAllOffers(this.props.match.params.requestId).then(res => {
@@ -79,25 +96,23 @@ class RequestInfo extends Component {
       <div className="row">
         <div className="col-sm-12">
           <h3>Confirmation:</h3>
-          <div className="card m-1 bg-light">
-            <div className="card-body d-flex justify-content-between">
-              <ul>
-                <li>
-                  Winner is {this.state.winner.username} with $ {this.state.bestPrice} bid!
-                </li>
-                <li>
-                  {" "}
-                  {this.state.winner.username}, is going to provide you with {this.state.item} surf
-                  board on - {this.state.time} at - {this.state.location}
-                </li>
-                <li>
-                  {" "}
-                  You can contact {this.state.winner.username} by this email: -
-                  {this.state.winner.email}{" "}
-                </li>
-              </ul>
-            </div>
-          </div>
+          <Card>
+            <li>
+              Winner is {this.state.winnerName} with $ {this.state.bestPrice}{" "}
+              bid!
+            </li>
+            <li>
+              {" "}
+              {this.state.winnerName}, is going to provide you with{" "}
+              {this.state.item} surf board on - {this.state.time} at -{" "}
+              {this.state.location}
+            </li>
+            <li>
+              {" "}
+              You can contact {this.state.winnerName} by this email: -
+              {this.state.winnerEmail}{" "}
+            </li>
+          </Card>
         </div>
       </div>
     );
@@ -106,10 +121,7 @@ class RequestInfo extends Component {
     return (
       <div className="row">
         <div className="col-sm-12">
-          <button
-            onClick={() => this.acceptBid(this.props.match.params.requestId)}
-            className="btn btn-danger"
-          >
+          <button onClick={() => this.acceptBid()} className="btn btn-danger">
             Accept bid
           </button>
           <button className="btn btn-primary ">Cancel request</button>
@@ -124,7 +136,10 @@ class RequestInfo extends Component {
         <div className="row">
           <div className="col-sm-12">
             <br />
-            <button onClick={() => this.props.history.push("/rentee/")} className="btn btn-danger">
+            <button
+              onClick={() => this.props.history.push("/rentee/")}
+              className="btn btn-danger"
+            >
               Back
             </button>
           </div>
@@ -138,30 +153,22 @@ class RequestInfo extends Component {
         <div className="row">
           <div className="col-sm-6">
             <h3>Offers:</h3>
-            <div className="card m-1 bg-light">
-              <div className="card-body">
-                <ul>
-                  {this.state.offers.map(offer => (
-                    <li key={offer._id}>
-                      ${offer.price} {offer.ownerId} {offer.createdAt}{" "}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
+            <Card>
+              {this.state.offers.map(offer => (
+                <li key={offer._id}>
+                  ${offer.price} {offer.ownerId} {offer.createdAt}{" "}
+                </li>
+              ))}
+            </Card>
           </div>
           <div className="col-sm-6">
             <h3>Request information:</h3>
-            <div className="card m-1 bg-light">
-              <div className="card-body d-flex justify-content-between">
-                <ul>
-                  <li>{this.state.item}</li>
-                  <li>{this.state.priceInitial}</li>
-                  <li>{this.state.time}</li>
-                  <li>{this.state.location}</li>
-                </ul>
-              </div>
-            </div>
+            <Card>
+              <li>{this.state.item}</li>
+              <li>{this.state.priceInitial}</li>
+              <li>{this.state.time}</li>
+              <li>{this.state.location}</li>
+            </Card>
           </div>
         </div>
         <hr />
