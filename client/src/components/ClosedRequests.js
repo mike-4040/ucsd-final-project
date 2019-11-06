@@ -19,11 +19,11 @@ function ClosedRequests({ requests }) {
         {requests.map(request =>
           <tr key={request._id}>
             <td>{request.item}</td>
-            <td>{request.priceInitial}</td>
-            <td>{request.priceBest}</td>
-            <td>{request.numberOffers}</td>
+            <td>{request.priceFinal}</td>
             <td>{request.location}</td>
             <td>{request.time}</td>
+            <td>{request.winnerName}</td>
+            <td>{request.winnerEmail}</td>
           </tr>
         )
         }

@@ -104,18 +104,20 @@ app.get('/api/requestsO/:renteeId', isAuthenticated, (req, res) => {
 app.get('/api/requestsC/:renteeId', isAuthenticated, (req, res) => {
   db.Request
     .find({ renteeId: req.params.renteeId, closed: true })
-    .then(renteeRequests => {
-      if (!renteeRequests)
+    .populate({ path: 'winnerId', select: 'username email'})
+    .then(requests => {
+      if (!requests)
         res.status(404).send({ success: false, message: 'No requests found' });
-      let requestsClean = renteeRequests.map(request => {
+      let requestsClean = requests.map(request => {
         return {
           _id: request._id,
           item: request.item,
           priceInitial: request.priceInitial,
           location: request.location,
           time: request.time,
-          priceBest: request.priceBest ? request.priceBest.price : null,
-          numberOffers: request.numberOffers
+          winnerName: request.winnerId.username,
+          winnerEmail: request.winnerId.email,
+          priceFinal: request.priceFinal
         }
       })
       res.json(requestsClean);
