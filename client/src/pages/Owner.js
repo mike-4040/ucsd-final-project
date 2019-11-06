@@ -1,10 +1,9 @@
-import React, { Component } from 'react';
-import withAuth from '../components/withAuth';
-import API from '../utils/API';
-import { Link } from 'react-router-dom';
+import React, { Component } from "react";
+import withAuth from "../components/withAuth";
+import API from "../utils/API";
+// import { Link } from 'react-router-dom';
 
 class Owner extends Component {
-
   state = {
     username: "",
     requests: [],
@@ -15,28 +14,30 @@ class Owner extends Component {
     API.getUser(this.props.user.id).then(res => {
       this.setState({
         username: res.data.username
-      })
+      });
     });
 
-    API.getOwnerReqs().then(res => {
-      console.log(res.data.requests)
-      this.setState({
-        requests: res.data.requests || []
+    API.getOwnerReqs()
+      .then(res => {
+        console.log(res.data.requests);
+        this.setState({
+          requests: res.data.requests || []
+        });
       })
-    }).catch(console.log);
+      .catch(console.log);
 
-    API.getOwnerClosedReqs().then(res => {
-      console.log(res.data.offers)
-      this.setState({
-        offers: res.data.offers || []
+    API.getOwnerClosedReqs()
+      .then(res => {
+        console.log(res.data.offers);
+        this.setState({
+          offers: res.data.offers || []
+        });
       })
-    }).catch(console.log);
-
+      .catch(console.log);
   }
-  showreq = (requestId) => {
-    this.props.history.push(`/owner/requests/${requestId}`)
+  showreq = requestId => {
+    this.props.history.push(`/owner/requests/${requestId}`);
   };
-
 
   render() {
     console.log(JSON.stringify(this.state, null, 2));
@@ -64,16 +65,13 @@ class Owner extends Component {
               </thead>
               <tbody>
                 {this.state.requests.map(request => (
-                  <tr key={request._id}
-                    onClick={() => this.showreq(request._id)}
-                  >
+                  <tr key={request._id} onClick={() => this.showreq(request._id)}>
                     <td>{request.item}</td>
                     <td>{request.priceInitial}</td>
                     <td>{request.location}</td>
                     <td>{request.time} </td>
                   </tr>
                 ))}
-
               </tbody>
             </table>
           </div>
@@ -106,13 +104,14 @@ class Owner extends Component {
                     <td>{closedOffers.time}</td>
                     {/* <td>closedReqs.kostas</td>
                     <td>closedReqs.location.kostas@gmail.com</td> */}
-                  </tr>))}
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
 

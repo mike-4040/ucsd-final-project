@@ -1,7 +1,6 @@
-import React from 'react';
+import React from "react";
 
-function OpenRequests({ requests }) {
-
+function OpenRequests({ requests, handler }) {
   return (
     <table className="table text-center table-hover ">
       <thead>
@@ -15,8 +14,8 @@ function OpenRequests({ requests }) {
         </tr>
       </thead>
       <tbody>
-        {requests.map(request =>
-          <tr key={request._id}>
+        {requests.map(request => (
+          <tr key={request._id} onClick={() => handler(request._id)}>
             <td>{request.item}</td>
             <td>{request.priceInitial}</td>
             <td>{request.priceBest}</td>
@@ -24,8 +23,7 @@ function OpenRequests({ requests }) {
             <td>{request.location}</td>
             <td>{request.time}</td>
           </tr>
-        )
-        }
+        ))}
       </tbody>
     </table>
   );

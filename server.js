@@ -11,7 +11,6 @@ const isAuthenticated = require("./config/isAuthenticated");
 const auth = require("./config/auth");
 
 const seed = require("./seed");
-
 // Setting CORS so that any website can
 // Access our API
 app.use((req, res, next) => {
@@ -132,9 +131,9 @@ app.get('/api/requestsC/:renteeId', isAuthenticated, (req, res) => {
 app.get('/api/requests', isAuthenticated, (req, res) => {
   // console.log('Request for Requests', req.params.ownerId);
  // --  isAuthenticated,
-      if (!req.user.isOwner) {
+  if (!req.user.isOwner) {
      return res.status(403).send('Must be an owner.')
-      }
+    }
   
   db.Request.find({closed: "false"}).then(data => {
     if(data) {
@@ -146,7 +145,7 @@ app.get('/api/requests', isAuthenticated, (req, res) => {
 });
 
 //api/owner/closedrequests
-app.get('api/owner/closedrequests', isAuthenticated, (req, res) => {
+app.get('/api/owner/closedrequests', isAuthenticated, (req, res) => {
   // console.log('Request for Requests', req.params.ownerId);
  // --  isAuthenticated,
       if (!req.user.isOwner) {
@@ -161,7 +160,6 @@ app.get('api/owner/closedrequests', isAuthenticated, (req, res) => {
     }
   }).catch(err => res.status(400).send(err));
 });
-
 
 // Serve up static assets (usually on heroku)
 
