@@ -25,7 +25,6 @@ class RequestInfo extends Component {
         bestOffer = this.state.offers[i];
       }
     }
-    // bestOffer.minprice = minprice;
     //getting winner info
     API.getUser(bestOffer.ownerId).then(res => {
       this.setState({
