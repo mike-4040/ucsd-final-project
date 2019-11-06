@@ -38,7 +38,7 @@ class Rentee extends Component {
       <div className="container ">
         {/* this button sends hardcoded id and relocate us to another page */}
         {/* 5dbcd95d8731ff5430bd228b */}
-        <button onClick={() => this.handleRequestClick("5dc20e1522a9012468cb9cb4")} className="btn btn-danger">open request</button>
+        <button onClick={() => this.handleRequestClick("5dc098703e03a351a835c88e")} className="btn btn-danger">open request</button>
         <br />
         <div className="row">
           <div className="col-sm-6 ">

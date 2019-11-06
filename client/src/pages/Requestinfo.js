@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import withAuth from "./../components/withAuth";
 import API from "./../utils/API";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 
 class RequestInfo extends Component {
   state = {
@@ -12,7 +12,8 @@ class RequestInfo extends Component {
     time: "",
     offers: [],
     winner: {},
-    bestPrice: ""
+    bestPrice: "",
+    closed: false
   };
 
   acceptBid = requestId => {
@@ -41,6 +42,9 @@ class RequestInfo extends Component {
     API.updateOffer(bestOffer).then(res => {
       console.log(res.data);
     });
+    this.setState({
+      isClosed:true
+    });
   };
 
   componentDidMount() {
@@ -50,7 +54,8 @@ class RequestInfo extends Component {
         item: res.data[0].item,
         priceInitial: res.data[0].priceInitial,
         location: res.data[0].location,
-        time: res.data[0].time
+        time: res.data[0].time,
+        closed: res.data[0].closed
       });
     });
 
@@ -162,7 +167,7 @@ class RequestInfo extends Component {
         </div>
         <hr />
       
-        {this.state.bestPrice ? this.renderConfirmation() : this.renderButtons()}
+        {this.state.closed ? this.renderConfirmation() : this.renderButtons()}
       </div>
     );
   }
