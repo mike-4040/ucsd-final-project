@@ -37,6 +37,10 @@ export default {
   
   //Getting all offers on single requestID
   getAllOffers: requestId => axios.get(`/api/offers/${requestId}`),
+  // Get all offers made for a req by Owner
+  getOffersMade: requestId => axios.get(`/api/offers`),
+  // Submit New Offer
+  newOffer: 
 
   updateRequest: bestOffer => {
    return axios.put("/api/request/", bestOffer);
