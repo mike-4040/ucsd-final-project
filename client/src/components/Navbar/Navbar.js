@@ -14,11 +14,10 @@ class Navbar extends Component {
         <ul className="navbar-nav">
           <li className="nav-item">
             <Link className="nav-link" to="/profile">
-              User: {this.Auth.getProfile().email}
+              Hello: {this.Auth.getProfile().username}
             </Link>
           </li>
           <li className="nav-item">
-            {/* this is not using the Link component to logout or user and then refresh the application to the start */}
             <a className="nav-link" href="/" onClick={() => this.Auth.logout()}>
               Logout
             </a>
