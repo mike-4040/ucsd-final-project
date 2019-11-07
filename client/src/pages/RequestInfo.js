@@ -31,7 +31,6 @@ class RequestInfo extends Component {
       this.setState({
         canceled: true
       });
-      alert("request is Canceled" + res.data);
     });
   };
   //ACCEPTING BID
@@ -39,9 +38,9 @@ class RequestInfo extends Component {
     if (!this.state.offers.length) {
       return alert("there is no offer to accept");
     }
-    let minprice = 1000;
+    let minprice = this.state.offers[0].price;
     let bestOffer = {};
-    for (let i = 0; i < this.state.offers.length; i++) {
+    for (let i = 1; i < this.state.offers.length; i++) {
       let price = this.state.offers[i].price;
       if (price < minprice) {
         minprice = price;
@@ -70,17 +69,9 @@ class RequestInfo extends Component {
 
   componentDidMount() {
     API.getSingleRequest(this.props.match.params.requestId).then(res => {
-      if (res.data[0].closed) {
+      if (res.data[0].closed && res.data[0].winnerId) {
         API.getUser(res.data[0].winnerId).then(response => {
           this.setState({
-            canceled: res.data[0].canceled,
-            renteeId: res.data[0].renteeId,
-            item: res.data[0].item,
-            priceInitial: res.data[0].priceInitial,
-            location: res.data[0].location,
-            time: res.data[0].time,
-            closed: res.data[0].closed,
-            bestPrice: res.data[0].priceFinal,
             winnerEmail: response.data.email,
             winnerName: response.data.username
           });

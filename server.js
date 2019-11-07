@@ -3,15 +3,16 @@ const express = require("express");
 const app = express();
 const path = require("path");
 const mongoose = require("mongoose");
-const morgan = require("morgan"); // used to see requests
-const db = require("./models");
-const PORT = process.env.PORT || 3001;
+const morgan = require("morgan");
 
+const db = require("./models");
+const schedule = require("./utils/schedule");
 const isAuthenticated = require("./config/isAuthenticated");
 const auth = require("./config/auth");
-
 const seed = require("./seed");
+
 // Setting CORS so that any website can
+const PORT = process.env.PORT || 3001;
 // Access our API
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -41,6 +42,8 @@ mongoose
   })
   .then(() => console.log("MongoDB Connected!"))
   .catch(err => console.error(err));
+
+// schedule();
 
 // LOGIN ROUTE
 app.post("/api/login", (req, res) => {
@@ -72,16 +75,13 @@ app.get("/api/user/:id", isAuthenticated, (req, res) => {
 });
 
 // Open requests
-app.get('/api/requestsO/:renteeId', isAuthenticated, (req, res) => {
-  db.Request
-    .find({ renteeId: req.params.renteeId, closed: false })
-    .populate({ path: 'priceBest' })
+app.get("/api/requestsO/:renteeId", isAuthenticated, (req, res) => {
+  db.Request.find({ renteeId: req.params.renteeId, closed: false })
+    .populate({ path: "priceBest" })
     .then(renteeRequests => {
-      // console.log("IM HERE!!!!!"+ renteeRequests[0].priceBest)
       if (!renteeRequests)
         res.status(404).send({ success: false, message: "No requests found" });
       let requestsClean = renteeRequests.map(request => {
-        // const bestOffer = request.bestOffer();
         return {
           _id: request._id,
           item: request.item,
@@ -100,65 +100,71 @@ app.get('/api/requestsO/:renteeId', isAuthenticated, (req, res) => {
     });
 });
 
-app.get('/api/requestsC/:renteeId', isAuthenticated, (req, res) => {
-  db.Request
-    .find({ renteeId: req.params.renteeId, closed: true })
-    .populate({ path: 'winnerId', select: 'username email'})
+app.get("/api/requestsC/:renteeId", isAuthenticated, (req, res) => {
+  db.Request.find({ renteeId: req.params.renteeId, closed: true })
+    .populate({ path: "winnerId", select: "username email" })
     .then(requests => {
       if (!requests)
-        res.status(404).send({ success: false, message: 'No requests found' });
+        res.status(404).send({ success: false, message: "No requests found" });
       let requestsClean = requests.map(request => {
-        return {
+        console.log(request);
+        let requestClean = {
           _id: request._id,
           item: request.item,
           priceInitial: request.priceInitial,
           location: request.location,
-          time: request.time,
-          winnerName: request.winnerId.username,
-          winnerEmail: request.winnerId.email,
-          priceFinal: request.priceFinal
+          time: request.time
+        };
+        if (request.winnerId) {
+          requestClean.winnerName = request.winnerId.username;
+          requestClean.winnerEmail = request.winnerId.email;
+          requestClean.priceFinal = request.priceFinal;
         }
-      })
+        return requestClean;
+      });
       res.json(requestsClean);
     })
     .catch(err => {
       console.log(err);
-      res.status(500).send(err)
+      res.status(500).send(err);
     });
 });
 
-
-app.get('/api/requests', isAuthenticated, (req, res) => {
+app.get("/api/requests", isAuthenticated, (req, res) => {
   // console.log('Request for Requests', req.params.ownerId);
- // --  isAuthenticated,
+  // --  isAuthenticated,
   if (!req.user.isOwner) {
-     return res.status(403).send('Must be an owner.')
-    }
-  
-  db.Request.find({closed: "false"}).then(data => {
-    if(data) {
-      res.json({requests: data});
-    } else {
-      res.status(404).send({success: false, message: 'No user found'});
-    }
-  }).catch(err => res.status(400).send(err));
+    return res.status(403).send("Must be an owner.");
+  }
+
+  db.Request.find({ closed: "false" })
+    .then(data => {
+      if (data) {
+        res.json({ requests: data });
+      } else {
+        res.status(404).send({ success: false, message: "No user found" });
+      }
+    })
+    .catch(err => res.status(400).send(err));
 });
 
 //api/owner/closedrequests
-app.get('/api/owner/closedrequests', isAuthenticated, (req, res) => {
+app.get("/api/owner/closedrequests", isAuthenticated, (req, res) => {
   // console.log('Request for Requests', req.params.ownerId);
- // --  isAuthenticated,
-      if (!req.user.isOwner) {
-     return res.status(403).send('Must be an owner.')
+  // --  isAuthenticated,
+  if (!req.user.isOwner) {
+    return res.status(403).send("Must be an owner.");
+  }
+
+  db.Offer.find({ closed: "true" })
+    .then(data => {
+      if (data) {
+        res.json({ offers: data });
+      } else {
+        res.status(404).send({ success: false, message: "No user found" });
       }
-  
-  db.Offer.find({closed: "true"}).then(data => {
-    if(data) {
-      res.json({offers: data});
-    } else {
-      res.status(404).send({success: false, message: 'No user found'});
-    }
-  }).catch(err => res.status(400).send(err));
+    })
+    .catch(err => res.status(400).send(err));
 });
 
 //Owner makes New Offer
@@ -171,7 +177,7 @@ app.post("/api/offer/", isAuthenticated, (req, res) => {
     .catch(err => {
       res.status(400).send(err.message);
     });
- });
+});
 
 // Serve up static assets (usually on heroku)
 
@@ -228,12 +234,12 @@ app.post("/api/offers/", isAuthenticated, (req, res) => {
 });
 
 //Route to view one request
-app.get('/api/owner/requests/:id',(req,res)=>{
-   //console.log(req.params.id)
+app.get("/api/owner/requests/:id", (req, res) => {
+  //console.log(req.params.id)
   db.Request.findById(req.params.id)
-  .then(data => res.json({request:data}))
-  .catch(err=>res.status(400).json(err))
-})
+    .then(data => res.json({ request: data }))
+    .catch(err => res.status(400).json(err));
+});
 
 //ADMIN
 
@@ -264,7 +270,7 @@ app.put("/api/request/", isAuthenticated, (req, res) => {
       closed: true,
       closedAt: Date.now(),
       priceFinal: req.body.price,
-        winnerId: req.body.ownerId,
+      winnerId: req.body.ownerId,
       canceled: req.body.canceled
     },
     { new: true }
