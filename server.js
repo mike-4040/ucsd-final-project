@@ -149,17 +149,21 @@ app.get("/api/requests", isAuthenticated, (req, res) => {
 });
 
 //api/owner/closedrequests
-app.get("/api/owner/closedrequests", isAuthenticated, (req, res) => {
+app.get("/api/offers/:ownerId", isAuthenticated, (req, res) => {
   // console.log('Request for Requests', req.params.ownerId);
   // --  isAuthenticated,
   if (!req.user.isOwner) {
     return res.status(403).send("Must be an owner.");
   }
 
-  db.Offer.find({ closed: "true" })
-    .then(data => {
-      if (data) {
-        res.json({ offers: data });
+  db.Offer
+    .find({ ownerId: req.params.ownerId})
+    .populate({path: "requestId", select: "closed item priceInitial location time -_id"})
+    .then(offers => {
+      if (offers) {
+        let offersClosed = offers.filter(offer => offer.requestId.closed);
+        console.log(offersClosed);
+        res.json({offers: offersClosed});
       } else {
         res.status(404).send({ success: false, message: "No user found" });
       }
