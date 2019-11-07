@@ -47,6 +47,9 @@ export default {
   },
   updateOffer: bestOffer => {
     return axios.put("/api/offer/", bestOffer);
+   },
+   cancelRequest : cancelRequest => {
+     return axios.put("/api/request/", cancelRequest)
    }
  
 };
