@@ -77,11 +77,9 @@ app.get('/api/requestsO/:renteeId', isAuthenticated, (req, res) => {
     .find({ renteeId: req.params.renteeId, closed: false })
     .populate({ path: 'priceBest' })
     .then(renteeRequests => {
-      // console.log("IM HERE!!!!!"+ renteeRequests[0].priceBest)
       if (!renteeRequests)
         res.status(404).send({ success: false, message: "No requests found" });
       let requestsClean = renteeRequests.map(request => {
-        // const bestOffer = request.bestOffer();
         return {
           _id: request._id,
           item: request.item,

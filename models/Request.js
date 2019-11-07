@@ -66,6 +66,12 @@ RequestSchema.pre("find", function() {
   this.populate("numberOffers");
 });
 
+RequestSchema.virtual("offers", {
+  ref: "Offer",
+  localField: "_id",
+  foreignField: "requestId"
+})
+
 
 const Request = mongoose.model("Request", RequestSchema);
 
