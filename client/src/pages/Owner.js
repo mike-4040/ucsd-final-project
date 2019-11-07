@@ -26,9 +26,9 @@ class Owner extends Component {
       })
       .catch(console.log);
 
-    API.getOwnerClosedReqs()
+    API.getOffersClosed(this.props.user.id)
       .then(res => {
-        console.log(res.data.offers);
+        //console.log(res.data.offers);
         this.setState({
           offers: res.data.offers || []
         });
@@ -65,7 +65,10 @@ class Owner extends Component {
               </thead>
               <tbody>
                 {this.state.requests.map(request => (
-                  <tr key={request._id} onClick={() => this.showreq(request._id)}>
+                  <tr
+                    key={request._id}
+                    onClick={() => this.showreq(request._id)}
+                  >
                     <td>{request.item}</td>
                     <td>{request.priceInitial}</td>
                     <td>{request.location}</td>
@@ -79,7 +82,7 @@ class Owner extends Component {
         <br />
         <div className="row">
           <div className="col-sm-12">
-            <h1>My Complete request</h1>
+            <h1>My Offers</h1>
           </div>
         </div>
         <div className="row">
@@ -89,19 +92,23 @@ class Owner extends Component {
                 <tr>
                   <th scope="col">Items</th>
                   <th scope="col">Price</th>
+                  <th scope="col">Bid</th>
                   <th scope="col">Location</th>
                   <th scope="col">Time</th>
+                  <th scope="col">Winner</th>
                   {/* <th scope="col">Winner</th>
                     <th scope="col">Contact</th> */}
                 </tr>
               </thead>
               <tbody>
-                {this.state.offers.map(closedOffers => (
-                  <tr>
-                    <td>{closedOffers.Items}</td>
-                    <td>{closedOffers.priceInitial}</td>
-                    <td>{closedOffers.location}</td>
-                    <td>{closedOffers.time}</td>
+                {this.state.offers.map(closedOffer => (
+                  <tr key={closedOffer._id}>
+                    <td>{closedOffer.requestId.item}</td>
+                    <td>{closedOffer.requestId.priceInitial}</td>
+                    <td>{closedOffer.price}</td>
+                    <td>{closedOffer.requestId.location}</td>
+                    <td>{closedOffer.requestId.time}</td>
+                    <td>{closedOffer.isWinner ? "Winner" : "No"}</td>
                     {/* <td>closedReqs.kostas</td>
                     <td>closedReqs.location.kostas@gmail.com</td> */}
                   </tr>

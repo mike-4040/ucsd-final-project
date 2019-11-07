@@ -72,10 +72,9 @@ app.get("/api/user/:id", isAuthenticated, (req, res) => {
 });
 
 // Open requests
-app.get('/api/requestsO/:renteeId', isAuthenticated, (req, res) => {
-  db.Request
-    .find({ renteeId: req.params.renteeId, closed: false })
-    .populate({ path: 'priceBest' })
+app.get("/api/requestsO/:renteeId", isAuthenticated, (req, res) => {
+  db.Request.find({ renteeId: req.params.renteeId, closed: false })
+    .populate({ path: "priceBest" })
     .then(renteeRequests => {
       // console.log("IM HERE!!!!!"+ renteeRequests[0].priceBest)
       if (!renteeRequests)
@@ -100,13 +99,12 @@ app.get('/api/requestsO/:renteeId', isAuthenticated, (req, res) => {
     });
 });
 
-app.get('/api/requestsC/:renteeId', isAuthenticated, (req, res) => {
-  db.Request
-    .find({ renteeId: req.params.renteeId, closed: true })
-    .populate({ path: 'winnerId', select: 'username email'})
+app.get("/api/requestsC/:renteeId", isAuthenticated, (req, res) => {
+  db.Request.find({ renteeId: req.params.renteeId, closed: true })
+    .populate({ path: "winnerId", select: "username email" })
     .then(requests => {
       if (!requests)
-        res.status(404).send({ success: false, message: 'No requests found' });
+        res.status(404).send({ success: false, message: "No requests found" });
       let requestsClean = requests.map(request => {
         return {
           _id: request._id,
@@ -117,48 +115,55 @@ app.get('/api/requestsC/:renteeId', isAuthenticated, (req, res) => {
           winnerName: request.winnerId.username,
           winnerEmail: request.winnerId.email,
           priceFinal: request.priceFinal
-        }
-      })
+        };
+      });
       res.json(requestsClean);
     })
     .catch(err => {
       console.log(err);
-      res.status(500).send(err)
+      res.status(500).send(err);
     });
 });
 
-
-app.get('/api/requests', isAuthenticated, (req, res) => {
+app.get("/api/requests", isAuthenticated, (req, res) => {
   // console.log('Request for Requests', req.params.ownerId);
- // --  isAuthenticated,
+  // --  isAuthenticated,
   if (!req.user.isOwner) {
-     return res.status(403).send('Must be an owner.')
-    }
-  
-  db.Request.find({closed: "false"}).then(data => {
-    if(data) {
-      res.json({requests: data});
-    } else {
-      res.status(404).send({success: false, message: 'No user found'});
-    }
-  }).catch(err => res.status(400).send(err));
+    return res.status(403).send("Must be an owner.");
+  }
+
+  db.Request.find({ closed: "false" })
+    .then(data => {
+      if (data) {
+        res.json({ requests: data });
+      } else {
+        res.status(404).send({ success: false, message: "No user found" });
+      }
+    })
+    .catch(err => res.status(400).send(err));
 });
 
 //api/owner/closedrequests
-app.get('/api/owner/closedrequests', isAuthenticated, (req, res) => {
+app.get("/api/offers/:ownerId", isAuthenticated, (req, res) => {
   // console.log('Request for Requests', req.params.ownerId);
- // --  isAuthenticated,
-      if (!req.user.isOwner) {
-     return res.status(403).send('Must be an owner.')
+  // --  isAuthenticated,
+  if (!req.user.isOwner) {
+    return res.status(403).send("Must be an owner.");
+  }
+
+  db.Offer
+    .find({ ownerId: req.params.ownerId})
+    .populate({path: "requestId", select: "closed item priceInitial location time -_id"})
+    .then(offers => {
+      if (offers) {
+        let offersClosed = offers.filter(offer => offer.requestId.closed);
+        console.log(offersClosed);
+        res.json({offers: offersClosed});
+      } else {
+        res.status(404).send({ success: false, message: "No user found" });
       }
-  
-  db.Offer.find({closed: "true"}).then(data => {
-    if(data) {
-      res.json({offers: data});
-    } else {
-      res.status(404).send({success: false, message: 'No user found'});
-    }
-  }).catch(err => res.status(400).send(err));
+    })
+    .catch(err => res.status(400).send(err));
 });
 
 //Owner makes New Offer
@@ -171,7 +176,7 @@ app.post("/api/offer/", isAuthenticated, (req, res) => {
     .catch(err => {
       res.status(400).send(err.message);
     });
- });
+});
 
 // Serve up static assets (usually on heroku)
 
@@ -228,12 +233,12 @@ app.post("/api/offers/", isAuthenticated, (req, res) => {
 });
 
 //Route to view one request
-app.get('/api/owner/requests/:id',(req,res)=>{
-   //console.log(req.params.id)
+app.get("/api/owner/requests/:id", (req, res) => {
+  //console.log(req.params.id)
   db.Request.findById(req.params.id)
-  .then(data => res.json({request:data}))
-  .catch(err=>res.status(400).json(err))
-})
+    .then(data => res.json({ request: data }))
+    .catch(err => res.status(400).json(err));
+});
 
 //ADMIN
 
