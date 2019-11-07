@@ -1,6 +1,6 @@
 const db = require("../models");
 
-const cutoffHours = 50;
+const cutoffHours = 12;
 
 function closeRequests() {
   let timeLimit = new Date();
@@ -11,13 +11,20 @@ function closeRequests() {
     .populate({ path: "offers", select: "price", sort: { price: 1 } })
     .then(requests => {
       requests.forEach(request => {
-        console.log("Request ID: ", request._id);
+        let requestUpdate = { closed: true };
+        
         if (request.offers.length) {
-          console.log("The winner is: ", request.offers[0]);
-        } else {
-          console.log("No offers");
+          db.Offer
+            .findByIdAndUpdate(request.offers[0]._id, { isWinner: true })
+            .catch(err => console.log(err));
+
+          requestUpdate.priceFinal = request.offers.price;
+          requestUpdate.winnerId = request.offers.ownerId;
         }
-        console.log("Offers: \n", request.offers);
+      
+        db.Request
+          .findByIdAndUpdate(request._id, requestUpdate)
+          .catch(err => console.log(err))
       });
     });
 }

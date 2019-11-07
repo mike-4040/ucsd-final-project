@@ -43,7 +43,7 @@ mongoose
   .then(() => console.log("MongoDB Connected!"))
   .catch(err => console.error(err));
 
-schedule();
+// schedule();
 
 // LOGIN ROUTE
 app.post("/api/login", (req, res) => {
@@ -109,16 +109,21 @@ app.get('/api/requestsC/:renteeId', isAuthenticated, (req, res) => {
       if (!requests)
         res.status(404).send({ success: false, message: 'No requests found' });
       let requestsClean = requests.map(request => {
-        return {
+        console.log(request);
+        let requestClean = {
           _id: request._id,
           item: request.item,
           priceInitial: request.priceInitial,
           location: request.location,
           time: request.time,
-          winnerName: request.winnerId.username,
-          winnerEmail: request.winnerId.email,
-          priceFinal: request.priceFinal
+        };
+        if (request.winnerId) {
+          requestClean.winnerName = request.winnerId.username;
+          requestClean.winnerEmail = request.winnerId.email;
+          requestClean.priceFinal = request.priceFinal
         }
+        return requestClean;
+  
       })
       res.json(requestsClean);
     })

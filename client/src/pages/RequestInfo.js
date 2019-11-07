@@ -50,16 +50,9 @@ class RequestInfo extends Component {
 
   componentDidMount() {
     API.getSingleRequest(this.props.match.params.requestId).then(res => {
-      if (res.data[0].closed) {
+      if (res.data[0].closed && res.data[0].winnerId) {
         API.getUser(res.data[0].winnerId).then(response => {
           this.setState({
-            renteeId: res.data[0].renteeId,
-            item: res.data[0].item,
-            priceInitial: res.data[0].priceInitial,
-            location: res.data[0].location,
-            time: res.data[0].time,
-            closed: res.data[0].closed,
-            bestPrice: res.data[0].priceFinal,
             winnerEmail: response.data.email,
             winnerName: response.data.username
           });

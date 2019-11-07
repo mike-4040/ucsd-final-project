@@ -3,7 +3,7 @@ const CronJob = require("../node_modules/cron/lib/cron").CronJob;
 const closeRequests = require("./closeRequests");
 
 function schedule() {
-  const job = new CronJob("0 */15 * * * *", function() {
+  const job = new CronJob("0 */1 * * * *", function() {
     closeRequests();
   });
   job.start();

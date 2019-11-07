@@ -43,6 +43,10 @@ const RequestSchema = new Schema(
       type: Schema.Types.ObjectId,
       default: null,
       ref: "User"
+    },
+    canceled :{
+      type: Boolean,
+      default: false
     }
   },
   opts
