@@ -3,15 +3,16 @@ const express = require("express");
 const app = express();
 const path = require("path");
 const mongoose = require("mongoose");
-const morgan = require("morgan"); // used to see requests
-const db = require("./models");
-const PORT = process.env.PORT || 3001;
+const morgan = require("morgan");
 
+const db = require("./models");
+const schedule = require("./utils/schedule");
 const isAuthenticated = require("./config/isAuthenticated");
 const auth = require("./config/auth");
-
 const seed = require("./seed");
+
 // Setting CORS so that any website can
+const PORT = process.env.PORT || 3001;
 // Access our API
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -41,6 +42,8 @@ mongoose
   })
   .then(() => console.log("MongoDB Connected!"))
   .catch(err => console.error(err));
+
+schedule();
 
 // LOGIN ROUTE
 app.post("/api/login", (req, res) => {

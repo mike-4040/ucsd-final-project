@@ -1,9 +1,13 @@
-const CronJob = require('../node_modules/cron/lib/cron').CronJob;
-const closeRequests = require('./closeRequests')
+const CronJob = require("../node_modules/cron/lib/cron").CronJob;
 
-console.log('Before job instantiation');
-const job = new CronJob('0 */1 * * * *', function() {
-	closeRequests('Hi from closing requests');
-});
-console.log('After job instantiation');
-job.start();
+const closeRequests = require("./closeRequests");
+
+function schedule() {
+  const job = new CronJob("0 */15 * * * *", function() {
+    closeRequests();
+  });
+  job.start();
+  console.log("Requests Auto Close has been scheduled");
+}
+
+module.exports = schedule;
