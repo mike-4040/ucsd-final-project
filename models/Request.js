@@ -43,6 +43,10 @@ const RequestSchema = new Schema(
       type: Schema.Types.ObjectId,
       default: null,
       ref: "User"
+    },
+    canceled :{
+      type: Boolean,
+      default: false
     }
   },
   opts
@@ -65,6 +69,12 @@ RequestSchema.virtual("numberOffers", {
 RequestSchema.pre("find", function() {
   this.populate("numberOffers");
 });
+
+RequestSchema.virtual("offers", {
+  ref: "Offer",
+  localField: "_id",
+  foreignField: "requestId"
+})
 
 
 const Request = mongoose.model("Request", RequestSchema);
