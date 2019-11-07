@@ -264,11 +264,13 @@ app.put("/api/request/", isAuthenticated, (req, res) => {
       closed: true,
       closedAt: Date.now(),
       priceFinal: req.body.price,
-      winnerId: req.body.ownerId
+        winnerId: req.body.ownerId,
+      canceled: req.body.canceled
     },
     { new: true }
   )
     .then(function(data) {
+      // console.log(data)
       res.json(data);
     })
     .catch(err => res.status(400).json(err));
