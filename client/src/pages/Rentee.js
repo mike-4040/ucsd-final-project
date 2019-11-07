@@ -28,7 +28,6 @@ class Rentee extends Component {
   };
 
   render() {
-    console.log(this.state.requestsOpen);
     return (
       <div className="container ">
         <div className="row">

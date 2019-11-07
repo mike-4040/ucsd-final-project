@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import withAuth from "./../components/withAuth";
 import Card from "../components/Card";
 import API from "./../utils/API";
+import { truncateSync } from "fs";
 // import { Link } from "react-router-dom";
 
 class RequestInfo extends Component {
@@ -15,13 +16,31 @@ class RequestInfo extends Component {
     bestPrice: "",
     closed: false,
     winnerName: "",
-    winnerEmail: ""
+    winnerEmail: "",
+    canceled: false
   };
 
+  cancelBid = () => {
+    let cancelRequest = {
+      requestId: this.props.match.params.requestId,
+      closed: true,
+      price: 0,
+      canceled: true
+    };
+    API.cancelRequest(cancelRequest).then(res => {
+      this.setState({
+        canceled: true
+      });
+    });
+  };
+  //ACCEPTING BID
   acceptBid = () => {
-    let minprice = 1000;
+    if (!this.state.offers.length) {
+      return alert("there is no offer to accept");
+    }
+    let minprice = this.state.offers[0].price;
     let bestOffer = {};
-    for (let i = 0; i < this.state.offers.length; i++) {
+    for (let i = 1; i < this.state.offers.length; i++) {
       let price = this.state.offers[i].price;
       if (price < minprice) {
         minprice = price;
@@ -38,28 +57,21 @@ class RequestInfo extends Component {
 
     API.updateRequest(bestOffer).then(res => {
       this.setState({
-        bestPrice: res.data.priceFinal
+        bestPrice: res.data.priceFinal,
+        closed: true
       });
     });
 
-    API.updateOffer(bestOffer).then(res => {});
-    this.setState({
-      closed: true
+    API.updateOffer(bestOffer).then(res => {
+      console.log("all good!");
     });
   };
 
   componentDidMount() {
     API.getSingleRequest(this.props.match.params.requestId).then(res => {
-      if (res.data[0].closed) {
+      if (res.data[0].closed && res.data[0].winnerId) {
         API.getUser(res.data[0].winnerId).then(response => {
           this.setState({
-            renteeId: res.data[0].renteeId,
-            item: res.data[0].item,
-            priceInitial: res.data[0].priceInitial,
-            location: res.data[0].location,
-            time: res.data[0].time,
-            closed: res.data[0].closed,
-            bestPrice: res.data[0].priceFinal,
             winnerEmail: response.data.email,
             winnerName: response.data.username
           });
@@ -72,7 +84,8 @@ class RequestInfo extends Component {
         location: res.data[0].location,
         time: res.data[0].time,
         closed: res.data[0].closed,
-        bestPrice: res.data[0].priceFinal
+        bestPrice: res.data[0].priceFinal,
+        canceled: res.data[0].canceled
       });
       // console.log(res.data)
     });
@@ -124,12 +137,25 @@ class RequestInfo extends Component {
           <button onClick={() => this.acceptBid()} className="btn btn-danger">
             Accept bid
           </button>
-          <button className="btn btn-primary ">Cancel request</button>
+          <button onClick={() => this.cancelBid()} className="btn btn-primary ">
+            Cancel request
+          </button>
         </div>
       </div>
     );
   }
-
+  renderCancelation() {
+    return <h1>You have canceled your order!</h1>;
+  }
+  renderblock = () => {
+    if (this.state.canceled === true) {
+      return this.renderCancelation();
+    } else if (this.state.closed === true) {
+      return this.renderConfirmation();
+    } else {
+      return this.renderButtons();
+    }
+  };
   render() {
     return (
       <div className="container ">
@@ -172,8 +198,7 @@ class RequestInfo extends Component {
           </div>
         </div>
         <hr />
-
-        {this.state.closed ? this.renderConfirmation() : this.renderButtons()}
+        {this.renderblock()}
       </div>
     );
   }
