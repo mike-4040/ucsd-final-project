@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import withAuth from "./../components/withAuth";
 import API from "./../utils/API";
 import { Link } from "react-router-dom";
+import DateTimePicker from 'react-datetime-picker';
 
 
 class NewRequest extends Component {
@@ -11,6 +12,7 @@ class NewRequest extends Component {
     time: "",
     location: ""
   };
+  onChangeTime = time => this.setState({ time })
 
   handleChange = event => {
     const { name, value } = event.target;
@@ -95,7 +97,13 @@ class NewRequest extends Component {
                   Time
                 </label>
                 <div className="col-sm-10">
-                  <input
+                <DateTimePicker
+                  onChange={this.onChangeTime}
+                  value={this.state.time}
+                    disableClock="true"
+                    className="form-control"
+                />
+                  {/* <input
                     value={this.state.time}
                     onChange={this.handleChange}
                     type="datetime-local"
@@ -105,7 +113,7 @@ class NewRequest extends Component {
                     id="time"
                     placeholder=""
                     required
-                  />
+                  /> */}
                 </div>
               </div>
               <div className="form-group row">
