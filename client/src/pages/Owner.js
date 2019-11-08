@@ -5,22 +5,21 @@ import API from "../utils/API";
 
 class Owner extends Component {
   state = {
-    username: "",
+    // username: "",
     requests: [],
     closedOffers: [],
     openOffers:[]
   };
 
   componentDidMount() {
-    API.getUser(this.props.user.id).then(res => {
-      this.setState({
-        username: res.data.username
-      });
-    });
+    // API.getUser(this.props.user.id).then(res => {
+    //   this.setState({
+    //     username: res.data.username
+    //   });
+    // });
 
     API.getOwnerReqs()
       .then(res => {
-        console.log(res.data.requests);
         this.setState({
           requests: res.data.requests || []
         });
@@ -140,8 +139,6 @@ class Owner extends Component {
                   <th scope="col">Location</th>
                   <th scope="col">Time</th>
                   <th scope="col">Winner</th>
-                  {/* <th scope="col">Winner</th>
-                    <th scope="col">Contact</th> */}
                 </tr>
               </thead>
               <tbody>
@@ -153,8 +150,6 @@ class Owner extends Component {
                     <td>{closedOffer.requestId.location}</td>
                     <td>{closedOffer.requestId.time}</td>
                     <td>{closedOffer.isWinner ? "Winner" : "No"}</td>
-                    {/* <td>closedReqs.kostas</td>
-                    <td>closedReqs.location.kostas@gmail.com</td> */}
                   </tr>
                 ))}
               </tbody>

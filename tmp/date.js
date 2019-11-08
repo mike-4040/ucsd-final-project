@@ -14,3 +14,10 @@ console.log('UTC String : ', d.toUTCString());
 
 // console.log(tomorrow.toUTCString());
 
+var timeFormat = {
+  // year: 'numeric',
+  month: '2-digit', day: 'numeric', hour: '2-digit', minute: '2-digit'
+};
+
+console.log(new Date().toLocaleString("en-US", timeFormat));
+
