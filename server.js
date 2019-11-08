@@ -160,8 +160,10 @@ app.get("/api/offersOwner/:ownerId", isAuthenticated, (req, res) => {
     .populate({path: "requestId", select: "closed item priceInitial location time -_id"})
     .then(offers => {
       if (offers) {
-        let offersClosed = offers.filter(offer => offer.requestId.closed);
-        res.json({offers: offersClosed});
+        // let offersClosed = offers.filter(offer => offer.requestId.closed);
+        console.log(offers);
+        // res.json({offers: offersClosed});
+        res.json({offers: offers})
       } else {
         res.status(404).send({ success: false, message: "No user found" });
       }
