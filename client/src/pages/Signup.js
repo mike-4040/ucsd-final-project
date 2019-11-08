@@ -33,8 +33,9 @@ class Signup extends Component {
 
   handleChange = event => {
     const { name, value } = event.target;
-    if (name === "isOwner") this.setState({ isOwner: !this.state.isOwner });
-    else this.setState({ [name]: value });
+    // if (name === "isOwner") this.setState({ isOwner: !this.state.isOwner });
+    // else 
+    this.setState({ [name]: value });
   };
 
   render() {
@@ -52,13 +53,16 @@ class Signup extends Component {
                   <div className="form-group">
                     <h1 className="p-1">Create new account</h1>
                     <div className="btn-group mb-4 btn-group-toggle" data-toggle="buttons" role="group">
-                      <button type="button" className="btn  btn-light ">
+                      <button
+                        onClick={() => this.setState({ isOwner: false })}
+                        type="button"
+                        className={this.state.isOwner ? "btn btn-light" : "btn btn-dark"}>
                         Looking for Surfboard
                       </button>
                       <button
                         onClick={() => this.setState({ isOwner: true })}
                         type="button"
-                        className="btn  btn-light"
+                        className={!this.state.isOwner ? "btn btn-light" : "btn btn-dark"}
                       >
                         Renting Surfboards
                       </button>
