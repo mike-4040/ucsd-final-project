@@ -7,7 +7,8 @@ class Owner extends Component {
   state = {
     username: "",
     requests: [],
-    offers: []
+    closedOffers: [],
+    openOffers:[]
   };
 
   componentDidMount() {
@@ -28,10 +29,13 @@ class Owner extends Component {
 
     API.getOffersClosed(this.props.user.id)
       .then(res => {
-        //console.log(res.data.offers);
-        this.setState({
-          offers: res.data.offers || []
+        console.log("all offers")
+        console.log(res.data.offers);
+         this.setState({
+          closedOffers: res.data.offers.filter(offer => offer.requestId.closed) || [],
+          openOffers:res.data.offers.filter(offer => !offer.requestId.closed) || []
         });
+       // console.log(this.state.openOffers);
       })
       .catch(console.log);
   }
@@ -40,7 +44,9 @@ class Owner extends Component {
   };
 
   render() {
-    console.log(JSON.stringify(this.state, null, 2));
+    //console.log(JSON.stringify(this.state, null, 2));
+    console.log("open offers")
+    console.log(this.state.openOffers);
     return (
       <div className="container ">
         <br />
@@ -82,7 +88,45 @@ class Owner extends Component {
         <br />
         <div className="row">
           <div className="col-sm-12">
-            <h1>My Offers</h1>
+            <h1>My Open Offers</h1>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-sm-12">
+            <table className="table text-center table-hover ">
+              <thead>
+                <tr>
+                  <th scope="col">Items</th>
+                  <th scope="col">Price</th>
+                  <th scope="col">Bid</th>
+                  <th scope="col">Location</th>
+                  <th scope="col">Time</th>
+                  {/* <th scope="col">Winner</th>
+                  <th scope="col">Winner</th>
+                    <th scope="col">Contact</th> */}
+                </tr>
+              </thead>
+              <tbody>
+                {this.state.openOffers.map(openOffer => (
+                  <tr key={openOffer._id}>
+                    <td>{openOffer.requestId.item}</td>
+                    <td>{openOffer.requestId.priceInitial}</td>
+                    <td>{openOffer.price}</td>
+                    <td>{openOffer.requestId.location}</td>
+                    <td>{openOffer.requestId.time}</td>
+                    {/* <td>{openOffer.isWinner ? "Winner" : "No"}</td>
+                    <td>closedReqs.kostas</td>
+                    <td>closedReqs.location.kostas@gmail.com</td> */}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <br />
+        <div className="row">
+          <div className="col-sm-12">
+            <h1>My Closed Offers</h1>
           </div>
         </div>
         <div className="row">
@@ -101,7 +145,7 @@ class Owner extends Component {
                 </tr>
               </thead>
               <tbody>
-                {this.state.offers.map(closedOffer => (
+                {this.state.closedOffers.map(closedOffer => (
                   <tr key={closedOffer._id}>
                     <td>{closedOffer.requestId.item}</td>
                     <td>{closedOffer.requestId.priceInitial}</td>
