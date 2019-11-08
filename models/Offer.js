@@ -8,7 +8,8 @@ const OfferSchema = new Schema({
   },
   ownerId: {
     type: Schema.Types.ObjectId,
-    required: true
+    required: true,
+    ref: 'User'
   },
   price: {
     type: Number,

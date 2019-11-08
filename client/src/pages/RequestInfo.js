@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import withAuth from "./../components/withAuth";
 import Card from "../components/Card";
 import API from "./../utils/API";
-// import { truncateSync } from "fs";
-// import { Link } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 class RequestInfo extends Component {
   state = {
@@ -18,6 +18,16 @@ class RequestInfo extends Component {
     winnerName: "",
     winnerEmail: "",
     canceled: false
+  };
+  notify = () => {
+    toast.warn('🦄 There are no offers, yet!', {
+      position: "top-left",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true
+      });
   };
 
   cancelBid = () => {
@@ -36,7 +46,7 @@ class RequestInfo extends Component {
   //ACCEPTING BID
   acceptBid = () => {
     if (!this.state.offers.length) {
-      return alert("there is no offer to accept");
+      return this.notify();
     }
     let minprice = this.state.offers[0].price;
     let bestOffer = {};
@@ -91,7 +101,7 @@ class RequestInfo extends Component {
     });
 
     API.getAllOffers(this.props.match.params.requestId).then(res => {
-      // console.log(res.data)
+      console.log(res.data);
       this.setState({
         offers: res.data
       });
@@ -117,12 +127,13 @@ class RequestInfo extends Component {
             <li>
               {" "}
               {this.state.winnerName}, is going to provide you with{" "}
-              {this.state.item} surf board on {new Date(this.state.time).toLocaleString()} at {" "}
+              {this.state.item} surf board on{" "}
+              {new Date(this.state.time).toLocaleString()} at{" "}
               {this.state.location}
             </li>
             <li>
               {" "}
-              You can contact {this.state.winnerName} by this email: 
+              You can contact {this.state.winnerName} by this email:
               {this.state.winnerEmail}{" "}
             </li>
           </Card>
@@ -183,7 +194,7 @@ class RequestInfo extends Component {
             <Card>
               {this.state.offers.map(offer => (
                 <li key={offer._id}>
-                  ${offer.price} {offer.ownerId}{" "}
+                  ${offer.price} {offer.ownerId.username}{" "}
                   {new Date(offer.createdAt).toLocaleString()}{" "}
                 </li>
               ))}
@@ -201,6 +212,17 @@ class RequestInfo extends Component {
         </div>
         <hr />
         {this.renderblock()}
+        <ToastContainer
+          position="top-left"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnVisibilityChange
+          draggable
+          pauseOnHover
+        />
       </div>
     );
   }
