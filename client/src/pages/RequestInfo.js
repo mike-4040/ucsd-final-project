@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import withAuth from "./../components/withAuth";
 import Card from "../components/Card";
 import API from "./../utils/API";
-import { truncateSync } from "fs";
+// import { truncateSync } from "fs";
 // import { Link } from "react-router-dom";
 
 class RequestInfo extends Component {

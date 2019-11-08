@@ -12,7 +12,6 @@ class Rentee extends Component {
   };
 
   componentDidMount() {
-    // console.log(this.props.user.id)
     API.getUser(this.props.user.id).then(res =>
       this.setState({ username: res.data.username })
     );
@@ -66,7 +65,7 @@ class Rentee extends Component {
           </div>
         </div>
         <div className="row">
-          <div className="col-sm-12 table-responsive">
+          <div className="col-sm-12 col-md-12 col-lg-12 table-responsive">
             {this.state.requestsClosed.length === 0 ? (
               <h2>No requests</h2>
             ) : (

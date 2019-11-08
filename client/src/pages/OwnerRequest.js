@@ -1,20 +1,16 @@
-//
 import React, { Component } from "react";
 import withAuth from "./../components/withAuth";
 import API from "./../utils/API";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 
 class OwnerRequest extends Component {
-  // constructor() {
-  //   super();
-  //   this.Auth = new AuthService();
-  // }
-
   state = {
     request: null,
     offers: [],
-    newOffer: ""
+    newOffer: "",
+    minOffer: Infinity
   };
+
   handleChange = event => {
     const { name, value } = event.target;
     this.setState({
@@ -23,22 +19,32 @@ class OwnerRequest extends Component {
   };
 
   submitNewOffer = () => {
-    // object for new offer
+    if (this.state.newOffer > this.state.minOffer - 1)
+      return alert("Offer should be at leatst $1 less than current best offer!");
     let objNewOffer = {
       requestId: this.props.match.params.requestId,
       ownerId: this.props.user.id,
       price: this.state.newOffer
     };
     // API.
-    API.newOffer(objNewOffer).then(res => {
-      this.fetchOffers();
-    });
+    API.newOffer(objNewOffer)
+      .then(res => {
+        this.fetchOffers();
+      })
+      .catch(err => console.log(err));
   };
 
   fetchOffers() {
-    API.getAllOffers(this.props.match.params.requestId).then(res => {
-      this.setState({ offers: res.data || [] });
-    });
+    API.getAllOffers(this.props.match.params.requestId)
+      .then(res => {
+        const minOffer = Math.min(...res.data.map(offer => offer.price));
+
+        this.setState({
+          offers: res.data || [],
+          minOffer
+        });
+      })
+      .catch(err => console.log(err));
   }
 
   componentDidMount() {
@@ -50,8 +56,6 @@ class OwnerRequest extends Component {
   }
 
   render() {
-    // console.log(this.state.request);
-    // console.log('User ID', this.props.user.id)
     return (
       <div className="container wrapper">
         {!this.state.request ? (
@@ -65,7 +69,7 @@ class OwnerRequest extends Component {
                   className="btn btn-danger"
                   onClick={() => this.props.history.push("/owner/")}
                 >
-                  back
+                  Back
                 </button>
               </div>
             </div>

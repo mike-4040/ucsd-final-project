@@ -24,7 +24,7 @@ const OfferSchema = new Schema({
   },
   isWinner: {
     type: Boolean,
-    default: false
+    default: false,
   }
 });
 

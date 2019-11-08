@@ -6,7 +6,7 @@ const mongoose = require("mongoose");
 const morgan = require("morgan");
 
 const db = require("./models");
-const schedule = require("./utils/schedule");
+// const schedule = require("./utils/schedule"); // DO NOT REMOVE
 const isAuthenticated = require("./config/isAuthenticated");
 const auth = require("./config/auth");
 const seed = require("./seed");
@@ -43,7 +43,7 @@ mongoose
   .then(() => console.log("MongoDB Connected!"))
   .catch(err => console.error(err));
 
-// schedule();
+// schedule();                          //DO NOT REMOVE
 
 // LOGIN ROUTE
 app.post("/api/login", (req, res) => {
@@ -107,7 +107,6 @@ app.get("/api/requestsC/:renteeId", isAuthenticated, (req, res) => {
       if (!requests)
         res.status(404).send({ success: false, message: "No requests found" });
       let requestsClean = requests.map(request => {
-        // console.log(request);
         let requestClean = {
           _id: request._id,
           item: request.item,
@@ -149,17 +148,22 @@ app.get("/api/requests", isAuthenticated, (req, res) => {
 });
 
 //api/owner/closedrequests
-app.get("/api/owner/closedrequests", isAuthenticated, (req, res) => {
+app.get("/api/offersOwner/:ownerId", isAuthenticated, (req, res) => {
   // console.log('Request for Requests', req.params.ownerId);
   // --  isAuthenticated,
   if (!req.user.isOwner) {
     return res.status(403).send("Must be an owner.");
   }
 
-  db.Offer.find({ closed: "true" })
-    .then(data => {
-      if (data) {
-        res.json({ offers: data });
+  db.Offer
+    .find({ ownerId: req.params.ownerId})
+    .populate({path: "requestId", select: "closed item priceInitial location time -_id"})
+    .then(offers => {
+      if (offers) {
+        // let offersClosed = offers.filter(offer => offer.requestId.closed);
+        console.log(offers);
+        // res.json({offers: offersClosed});
+        res.json({offers: offers})
       } else {
         res.status(404).send({ success: false, message: "No user found" });
       }
@@ -217,11 +221,10 @@ app.get("/api/offers/:requestId", isAuthenticated, (req, res) => {
   // console.log(req.params.requestId)
   db.Offer.find({ requestId: req.params.requestId })
     .then(data => {
-      // console.log(data);
       if (data) {
         res.json(data);
       } else {
-        res.status(404).send({ success: false, message: "Request not found" });
+        res.status(404).send({ success: false, message: "No offers for this request" });
       }
     })
     .catch(err => res.status(400).send(err));
