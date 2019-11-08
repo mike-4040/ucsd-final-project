@@ -57,8 +57,7 @@ class OwnerRequest extends Component {
 
   render() {
     return (
-      <div>
-        <h1>Request Details Page</h1>
+      <div className="container wrapper">
         {!this.state.request ? (
           <p>Nothing</p>
         ) : (
@@ -76,13 +75,13 @@ class OwnerRequest extends Component {
             </div>
             <br />
             <div className="row">
-              <div className="col-sm-6 ">
+              <div className="col-lg-12">
                 <h1>Make a Bid!</h1>
               </div>
             </div>
             <hr />
             <div className="row">
-              <div className="col-sm-6">
+            <div className="col-sm-12 col-md-12 col-lg-6">
                 <h3>Offers:</h3>
                 <div className="card m-1 bg-light">
                   <div className="card-body d-flex justify-content-between">
@@ -96,7 +95,7 @@ class OwnerRequest extends Component {
                   </div>
                 </div>
               </div>
-              <div className="col-sm-6">
+              <div className="col-sm-12 col-md-12 col-lg-6">
                 <h3>Request information:</h3>
                 <div className="card m-1 bg-light">
                   <div className="card-body d-flex justify-content-between">
@@ -112,7 +111,7 @@ class OwnerRequest extends Component {
             </div>
             <hr />
             <div className="row ">
-              <div className="col-sm-5">
+              <div className="col-sm-12 col-md-10 col-lg-6">
                 <div className="input-group mb-3">
                   <div className="input-group-prepend">
                     <span className="input-group-text">$</span>

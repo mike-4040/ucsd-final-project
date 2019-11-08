@@ -22,3 +22,34 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+body{
+  /* background: url('./oliver-sjostrom-y-GMWtWW_H8-unsplash.jpg') no-repeat center center fixed; */
+  background-image: url("./oliver-sjostrom-y-GMWtWW_H8-unsplash.jpg"); /* The image used */
+  height: 500px; /* You must set a specified height */
+  background-position: center; /* Center the image */
+  background-repeat: no-repeat; /* Do not repeat the image */
+  background-size: cover; /* Resize the background image to cover the entire container */
+  background-color: #0B1B1B;
+}
+/* .card{
+  background-color:rgba(255, 255, 255, 0.397);
+} */
+.wrapper{
+  background-color: rgba(240, 248, 255, 0.938);
+  padding: 20px;
+  border-radius: 10px;
+}
+.nav-link{
+  /* color:white !important; */
+  /* font-size: 20px; */
+}
+input{
+  background-color: rgba(255, 255, 255, 0.479) !important;
+}
+select{
+  background-color: rgba(255, 255, 255, 0.466) !important;
+}
+.card{
+  background-color: rgba(255, 255, 255, 0.904) !important;
+}

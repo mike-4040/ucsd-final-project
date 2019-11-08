@@ -8,7 +8,7 @@ class Owner extends Component {
     // username: "",
     requests: [],
     closedOffers: [],
-    openOffers:[]
+    openOffers: []
   };
 
   componentDidMount() {
@@ -28,13 +28,15 @@ class Owner extends Component {
 
     API.getOffersClosed(this.props.user.id)
       .then(res => {
-        console.log("all offers")
+        console.log("all offers");
         console.log(res.data.offers);
-         this.setState({
-          closedOffers: res.data.offers.filter(offer => offer.requestId.closed) || [],
-          openOffers:res.data.offers.filter(offer => !offer.requestId.closed) || []
+        this.setState({
+          closedOffers:
+            res.data.offers.filter(offer => offer.requestId.closed) || [],
+          openOffers:
+            res.data.offers.filter(offer => !offer.requestId.closed) || []
         });
-       // console.log(this.state.openOffers);
+        // console.log(this.state.openOffers);
       })
       .catch(console.log);
   }
@@ -44,10 +46,10 @@ class Owner extends Component {
 
   render() {
     //console.log(JSON.stringify(this.state, null, 2));
-    console.log("open offers")
+    console.log("open offers");
     console.log(this.state.openOffers);
     return (
-      <div className="container ">
+      <div className="container wrapper">
         <br />
         <div className="row">
           <div className="col-sm-6 ">
@@ -58,8 +60,8 @@ class Owner extends Component {
           </div>
         </div>
         <div className="row">
-          <div className="col-sm-12">
-            <table className="table text-center table-hover ">
+          <div className="col-sm-12 col-md-12 col-lg-12 table-responsive">
+            <table className="table table-sm text-center table-hover table-condensed">
               <thead>
                 <tr>
                   <th scope="col">Items</th>
@@ -91,8 +93,8 @@ class Owner extends Component {
           </div>
         </div>
         <div className="row">
-          <div className="col-sm-12">
-            <table className="table text-center table-hover ">
+          <div className="col-sm-12 col-md-12 col-lg-12 table-responsive">
+            <table className="table table-sm text-center table-hover table-condensed">
               <thead>
                 <tr>
                   <th scope="col">Items</th>
@@ -129,8 +131,8 @@ class Owner extends Component {
           </div>
         </div>
         <div className="row">
-          <div className="col-sm-12">
-            <table className="table text-center table-hover ">
+          <div className="col-sm-12 col-md-12 col-lg-12 table-responsive">
+            <table className="table table-sm text-center table-hover table-condensed">
               <thead>
                 <tr>
                   <th scope="col">Items</th>

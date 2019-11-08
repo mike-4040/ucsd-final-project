@@ -45,14 +45,14 @@ class Signup extends Component {
     return (
       <div className="container ">
         <div className="row mt-5 d-flex justify-content-center">
-          <div className="col-sm-6 ">
-            <div className="card ">
+        <div class="col-sm-12 col-md-10 col-lg-6">
+            <div className="card">
               <div className="card-body">
                 <form className="m-3" onSubmit={this.handleFormSubmit}>
                   <div className="form-group">
                     <h1 className="p-1">Create new account</h1>
-                    <div className="btn-group mb-4" role="group">
-                      <button type="button" className="btn  btn-light">
+                    <div className="btn-group mb-4 btn-group-toggle" data-toggle="buttons" role="group">
+                      <button type="button" className="btn  btn-light ">
                         Looking for Surfboard
                       </button>
                       <button
@@ -104,7 +104,7 @@ class Signup extends Component {
                       </button>{" "}
                       <span id="separator">
                         {" "}
-                        if you not registered yet go to{" "}
+                        or{" "}
                       </span>{" "}
                       <Link to="/login">
                         <button id="logIn" className="btn  btn-light m-1">
@@ -119,58 +119,6 @@ class Signup extends Component {
           </div>
         </div>
       </div>
-      // <div className="container">
-
-      //   <h1>Signup</h1>
-      //   <form onSubmit={this.handleFormSubmit}>
-      //     <div className="form-group">
-      //       <label htmlFor="username">Username:</label>
-      //       <input className="form-control"
-      //              placeholder="Username goes here..."
-      //              name="username"
-      //              type="text"
-      //              id="username"
-      //              autoComplete="username"
-      //              onChange={this.handleChange}/>
-      //     </div>
-      //     <div className="form-group">
-      //       <label htmlFor="email">Email address:</label>
-      //       <input className="form-control"
-      //              placeholder="Email goes here..."
-      //              name="email"
-      //              type="email"
-      //              id="email"
-      //              autoComplete="email"
-      //              onChange={this.handleChange}/>
-      //     </div>
-      //     <div className="form-group">
-      //       <label htmlFor="pwd">Password:</label>
-      //       <input className="form-control"
-      //              placeholder="Password goes here..."
-      //              name="password"
-      //              type="password"
-      //              id="pwd"
-      //              autoComplete="new-password"
-      //              onChange={this.handleChange}/>
-      //     </div>
-      //     <div className="form-group"> {/* form-check */}
-      //       <input
-      //         className="form-check-input"
-      //         name="isOwner"
-      //         type="checkbox"
-      //         value="true"
-      //         id="isOwner"
-      //         onChange={this.handleChange}
-      //       />
-      //       <label className="form-check-label" htmlFor="isOwner">
-      //         Is Owner
-      //       </label>
-      //     </div>
-
-      //     <button type="submit" className="btn btn-primary">Submit</button>
-      //   </form>
-      //   <p><Link to="/login">Go to Login</Link></p>
-      // </div>
     );
   }
 }

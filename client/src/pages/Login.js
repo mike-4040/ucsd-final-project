@@ -34,8 +34,8 @@ class Login extends Component {
     return (
       <div className="container ">
         <div className="row mt-5 d-flex justify-content-center">
-          <div className="col-sm-6 ">
-            <div className="card ">
+        <div class="col-sm-12 col-md-8 col-lg-6">
+            <div className="card">
               <div className="card-body">
                 <form className="m-3" onSubmit={this.handleFormSubmit}>
                   <div className="form-group">
@@ -66,7 +66,7 @@ class Login extends Component {
                       <button type="submit" id="logIn" className="btn  btn-light m-1">
                         Log In
                       </button>{" "}
-                      <span id="separator"> if you not registered yet go to </span>{" "}
+                      <span id="separator"> or </span>{" "}
                       <Link to="/signup">
                         <button id="signUp" className="btn  btn-light m-1">
                           Sign up
