@@ -128,7 +128,8 @@ class OwnerRequest extends Component {
             </div>
             <hr />
             <div className="row ">
-              <div className="col-sm-12 col-md-10 col-lg-6">
+              <div className="col-sm-12 col-md-10 col-lg-6"
+               style = {{visibility: this.state.request.closed ? "hidden":"visible"}}>
                 <div className="input-group mb-3">
                   <div className="input-group-prepend">
                     <span className="input-group-text">$</span>
@@ -142,12 +143,13 @@ class OwnerRequest extends Component {
                     placeholder="Can you give lower price?"
                     aria-label="Example text with button addon"
                     aria-describedby="button-addon1"
+                    // style = {{visibility: this.state.request.closed ? "hidden":"visible"}}
                   />
                   <button
                     className="btn btn-outline-danger"
                     type="button"
                     id="button-addon1"
-                    // visibility = {!this.state.request.closed ? "visible":"hidden"}
+                    // style = {{visibility: this.state.request.closed ? "hidden":"visible"}}
                     onClick={() => this.submitNewOffer()}
                   >
                     > Make an offer
