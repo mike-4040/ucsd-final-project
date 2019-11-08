@@ -1,4 +1,5 @@
 import React from "react";
+import { timeFormat } from "../utils/settings";
 
 function OpenRequests({ requests, handler }) {
   return (
@@ -21,7 +22,7 @@ function OpenRequests({ requests, handler }) {
             <td>{request.priceBest}</td>
             <td>{request.numberOffers}</td>
             <td>{request.location}</td>
-            <td>{request.time}</td>
+            <td>{new Date(request.time).toLocaleString("en-US", timeFormat)}</td>
           </tr>
         ))}
       </tbody>
