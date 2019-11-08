@@ -2,7 +2,7 @@ import React from "react";
 
 function ClosedRequests({ requests, handler }) {
   return (
-    <table className="table text-center table-hover ">
+    <table className="table table-sm text-center table-hover">
       <thead>
         <tr>
           <th scope="col">Items</th>
@@ -19,7 +19,7 @@ function ClosedRequests({ requests, handler }) {
             <td>{request.item}</td>
             <td>{request.priceFinal}</td>
             <td>{request.location}</td>
-            <td>{request.time}</td>
+            <td>{new Date(request.time).toLocaleString()}</td>
             <td>{request.winnerName}</td>
             <td>{request.winnerEmail}</td>
           </tr>

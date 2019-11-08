@@ -45,15 +45,15 @@ class NewRequest extends Component {
   render() {
     return (
       <div className="container ">
-        <div className="row">
-          <div className="col-sm-12">
+        <div className="row justify-content-center">
+        <div class="col-sm-11  col-md-8 col-lg-7 wrapper">
             <br />
             <h1>Create new request</h1>
             <br />
             <form onSubmit={this.handleFormSubmit}>
               <div className="form-group row">
                 <label htmlFor="boardSize" className="col-sm-2 col-form-label">
-                  Surfboard size
+                  Board size
                 </label>
                 <div className="col-sm-10">
                   <select
@@ -132,7 +132,7 @@ class NewRequest extends Component {
                 </div>
               </div>
               <div className="form-group row">
-                <div className="col-sm-12">
+                <div className="col-sm-12 d-flex justify-content-between">
                   <button type="submit" className="btn btn-primary">
                     Submit
                   </button>

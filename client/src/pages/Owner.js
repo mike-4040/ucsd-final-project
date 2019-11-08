@@ -42,7 +42,7 @@ class Owner extends Component {
   render() {
     console.log(JSON.stringify(this.state, null, 2));
     return (
-      <div className="container ">
+      <div className="container wrapper">
         <br />
         <div className="row">
           <div className="col-sm-6 ">
@@ -53,7 +53,7 @@ class Owner extends Component {
           </div>
         </div>
         <div className="row">
-          <div className="col-sm-12">
+          <div className="col-sm-12 table-responsive">
             <table className="table text-center table-hover ">
               <thead>
                 <tr>
@@ -83,7 +83,7 @@ class Owner extends Component {
           </div>
         </div>
         <div className="row">
-          <div className="col-sm-12">
+          <div className="col-sm-12 table-responsive">
             <table className="table text-center table-hover ">
               <thead>
                 <tr>

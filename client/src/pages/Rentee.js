@@ -13,7 +13,9 @@ class Rentee extends Component {
 
   componentDidMount() {
     // console.log(this.props.user.id)
-    API.getUser(this.props.user.id).then(res => this.setState({ username: res.data.username }));
+    API.getUser(this.props.user.id).then(res =>
+      this.setState({ username: res.data.username })
+    );
     API.getRenteeReqsOpen(this.props.user.id).then(res =>
       this.setState({ requestsOpen: res.data })
     );
@@ -29,12 +31,9 @@ class Rentee extends Component {
 
   render() {
     return (
-      <div className="container ">
+      <div className="container wrapper">
         <div className="row">
-          <div className="col-sm-6 ">
-            <h1>My requests</h1>
-          </div>
-          <div className="col-sm-6 text-right">
+          <div className="col-sm-12 text-right">
             <button
               onClick={() => this.props.history.push("/newRequest")}
               className="btn btn-danger"
@@ -45,21 +44,29 @@ class Rentee extends Component {
         </div>
         <div className="row">
           <div className="col-sm-12">
+            <h1 className="tableName m-4">My requests</h1>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-sm-12 col-md-12 col-lg-12 table-responsive">
             {this.state.requestsOpen.length === 0 ? (
               <h2>No requests</h2>
             ) : (
-              <OpenRequests requests={this.state.requestsOpen} handler={this.handleRequestClick} />
+              <OpenRequests
+                requests={this.state.requestsOpen}
+                handler={this.handleRequestClick}
+              />
             )}
           </div>
         </div>
         <br />
         <div className="row">
           <div className="col-sm-12">
-            <h1>My Complete request</h1>
+            <h1 className="tableName m-4">My Complete request</h1>
           </div>
         </div>
         <div className="row">
-          <div className="col-sm-12">
+          <div className="col-sm-12 table-responsive">
             {this.state.requestsClosed.length === 0 ? (
               <h2>No requests</h2>
             ) : (

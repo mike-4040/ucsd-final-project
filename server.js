@@ -107,7 +107,7 @@ app.get("/api/requestsC/:renteeId", isAuthenticated, (req, res) => {
       if (!requests)
         res.status(404).send({ success: false, message: "No requests found" });
       let requestsClean = requests.map(request => {
-        console.log(request);
+        // console.log(request);
         let requestClean = {
           _id: request._id,
           item: request.item,

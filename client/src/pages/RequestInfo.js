@@ -117,12 +117,12 @@ class RequestInfo extends Component {
             <li>
               {" "}
               {this.state.winnerName}, is going to provide you with{" "}
-              {this.state.item} surf board on - {this.state.time} at -{" "}
+              {this.state.item} surf board on {new Date(this.state.time).toLocaleString()} at {" "}
               {this.state.location}
             </li>
             <li>
               {" "}
-              You can contact {this.state.winnerName} by this email: -
+              You can contact {this.state.winnerName} by this email: 
               {this.state.winnerEmail}{" "}
             </li>
           </Card>
@@ -132,8 +132,8 @@ class RequestInfo extends Component {
   }
   renderButtons() {
     return (
-      <div className="row">
-        <div className="col-sm-12">
+      <div className="row ">
+        <div className="col-sm-12 d-flex justify-content-between">
           <button onClick={() => this.acceptBid()} className="btn btn-danger">
             Accept bid
           </button>
@@ -145,7 +145,13 @@ class RequestInfo extends Component {
     );
   }
   renderCancelation() {
-    return <h1>You have canceled your order!</h1>;
+    return (
+      <div className="row ">
+        <div className="col-sm-12 d-flex justify-content-center">
+          <h1 className="text-danger">You have canceled your order!</h1>;
+        </div>
+      </div>
+    );
   }
   renderblock = () => {
     if (this.state.canceled === true) {
@@ -158,7 +164,7 @@ class RequestInfo extends Component {
   };
   render() {
     return (
-      <div className="container ">
+      <div className="container wrapper ">
         <div className="row">
           <div className="col-sm-12">
             <br />
@@ -170,29 +176,25 @@ class RequestInfo extends Component {
             </button>
           </div>
         </div>
-        <div className="row">
-          <div className="col-sm-12 text-right">
-            <h1>{this.state.username}</h1>
-          </div>
-        </div>
         <hr />
         <div className="row">
-          <div className="col-sm-6">
+          <div className="col-sm-12 col-md-12 col-lg-6">
             <h3>Offers:</h3>
             <Card>
               {this.state.offers.map(offer => (
                 <li key={offer._id}>
-                  ${offer.price} {offer.ownerId} {offer.createdAt}{" "}
+                  ${offer.price} {offer.ownerId}{" "}
+                  {new Date(offer.createdAt).toLocaleString()}{" "}
                 </li>
               ))}
             </Card>
           </div>
-          <div className="col-sm-6">
+          <div className="col-sm-12 col-md-12 col-lg-6">
             <h3>Request information:</h3>
             <Card>
               <li>{this.state.item}</li>
               <li>{this.state.priceInitial}</li>
-              <li>{this.state.time}</li>
+              <li>{new Date(this.state.time).toLocaleString()}</li>
               <li>{this.state.location}</li>
             </Card>
           </div>

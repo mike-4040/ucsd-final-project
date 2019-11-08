@@ -2,7 +2,7 @@ import React from "react";
 
 function OpenRequests({ requests, handler }) {
   return (
-    <table className="table text-center table-hover ">
+    <table className="table table-sm text-center table-hover table-condensed">
       <thead>
         <tr>
           <th scope="col">Items</th>
@@ -21,7 +21,7 @@ function OpenRequests({ requests, handler }) {
             <td>{request.priceBest}</td>
             <td>{request.numberOffers}</td>
             <td>{request.location}</td>
-            <td>{request.time}</td>
+            <td>{new Date(request.time).toLocaleString()}</td>
           </tr>
         ))}
       </tbody>
