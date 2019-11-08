@@ -3,7 +3,7 @@ import { timeFormat } from "../utils/settings";
 
 function OpenRequests({ requests, handler }) {
   return (
-    <table className="table text-center table-hover ">
+    <table className="table table-sm text-center table-hover table-condensed">
       <thead>
         <tr>
           <th scope="col">Items</th>

@@ -14,7 +14,7 @@ class Navbar extends Component {
         <ul className="navbar-nav">
           <li className="nav-item">
             <Link className="nav-link" to="/profile">
-              Hello: {this.Auth.getProfile().username}
+             {this.Auth.getProfile().username}
             </Link>
           </li>
           <li className="nav-item">
@@ -24,7 +24,8 @@ class Navbar extends Component {
           </li>
         </ul>
       );
-    } else {
+    }
+     else {
       return (
         <ul className="navbar-nav">
           <li className="nav-item">
@@ -44,10 +45,10 @@ class Navbar extends Component {
 
   render() {
     return (
-      <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
+      <nav class="navbar navbar-expand-lg navbar-light mb-4 shadow">
         <div className="container">
           <Link className="navbar-brand" to="/">
-            React JWT App
+           <h1>Bring</h1> 
           </Link>
           <button
             className="navbar-toggler"

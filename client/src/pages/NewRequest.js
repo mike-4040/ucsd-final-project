@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import withAuth from "./../components/withAuth";
 import API from "./../utils/API";
 import { Link } from "react-router-dom";
+import DateTimePicker from 'react-datetime-picker';
 
 
 class NewRequest extends Component {
@@ -11,6 +12,7 @@ class NewRequest extends Component {
     time: "",
     location: ""
   };
+  onChangeTime = time => this.setState({ time })
 
   handleChange = event => {
     const { name, value } = event.target;
@@ -45,15 +47,15 @@ class NewRequest extends Component {
   render() {
     return (
       <div className="container ">
-        <div className="row">
-          <div className="col-sm-12">
+        <div className="row justify-content-center">
+        <div class="col-sm-11  col-md-8 col-lg-7 wrapper">
             <br />
             <h1>Create new request</h1>
             <br />
             <form onSubmit={this.handleFormSubmit}>
               <div className="form-group row">
                 <label htmlFor="boardSize" className="col-sm-2 col-form-label">
-                  Surfboard size
+                  Board size
                 </label>
                 <div className="col-sm-10">
                   <select
@@ -95,7 +97,13 @@ class NewRequest extends Component {
                   Time
                 </label>
                 <div className="col-sm-10">
-                  <input
+                <DateTimePicker
+                  onChange={this.onChangeTime}
+                  value={this.state.time}
+                    disableClock="true"
+                    className="form-control"
+                />
+                  {/* <input
                     value={this.state.time}
                     onChange={this.handleChange}
                     type="datetime-local"
@@ -105,7 +113,7 @@ class NewRequest extends Component {
                     id="time"
                     placeholder=""
                     required
-                  />
+                  /> */}
                 </div>
               </div>
               <div className="form-group row">
@@ -132,7 +140,7 @@ class NewRequest extends Component {
                 </div>
               </div>
               <div className="form-group row">
-                <div className="col-sm-12">
+                <div className="col-sm-12 d-flex justify-content-between">
                   <button type="submit" className="btn btn-primary">
                     Submit
                   </button>
