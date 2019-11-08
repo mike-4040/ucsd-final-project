@@ -13,7 +13,8 @@
     "client": "cd client && npm run start",
     "install": "cd client && npm install",
     "build": "cd client && npm run build",
-    "heroku-postbuild": "npm run build"
+    "heroku-postbuild": "npm run build",
+    "seed:users": "node admin-scripts/seed-rentees"
   },
   "author": "",
   "license": "ISC",
