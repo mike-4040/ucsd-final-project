@@ -6,7 +6,7 @@ const mongoose = require("mongoose");
 const morgan = require("morgan");
 
 const db = require("./models");
-const schedule = require("./utils/schedule");
+// const schedule = require("./utils/schedule"); // DO NOT REMOVE
 const isAuthenticated = require("./config/isAuthenticated");
 const auth = require("./config/auth");
 const seed = require("./seed");
@@ -43,7 +43,7 @@ mongoose
   .then(() => console.log("MongoDB Connected!"))
   .catch(err => console.error(err));
 
-// schedule();
+// schedule();                          //DO NOT REMOVE
 
 // LOGIN ROUTE
 app.post("/api/login", (req, res) => {
@@ -219,7 +219,6 @@ app.get("/api/offers/:requestId", isAuthenticated, (req, res) => {
   // console.log(req.params.requestId)
   db.Offer.find({ requestId: req.params.requestId })
     .then(data => {
-      console.log("/app/offers/:requestId", data);
       if (data) {
         res.json(data);
       } else {
