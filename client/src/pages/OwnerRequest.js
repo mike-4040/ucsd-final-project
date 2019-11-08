@@ -7,7 +7,8 @@ class OwnerRequest extends Component {
   state = {
     request: null,
     offers: [],
-    newOffer: ""
+    newOffer: "",
+    minOffer: Infinity
   };
 
   handleChange = event => {
@@ -18,7 +19,8 @@ class OwnerRequest extends Component {
   };
 
   submitNewOffer = () => {
-    // object for new offer
+    if (this.state.newOffer > this.state.minOffer - 1)
+      return alert("Offer should be at leatst $1 less than current best offer!");
     let objNewOffer = {
       requestId: this.props.match.params.requestId,
       ownerId: this.props.user.id,
@@ -35,8 +37,12 @@ class OwnerRequest extends Component {
   fetchOffers() {
     API.getAllOffers(this.props.match.params.requestId)
       .then(res => {
-        console.log("fetchOffers", res.data);
-        this.setState({ offers: res.data || [] });
+        const minOffer = Math.min(...res.data.map(offer => offer.price));
+
+        this.setState({
+          offers: res.data || [],
+          minOffer
+        });
       })
       .catch(err => console.log(err));
   }
@@ -60,7 +66,10 @@ class OwnerRequest extends Component {
             <div className="row">
               <div className="col-sm-12">
                 <br />
-                <button className="btn btn-danger" onClick={() => this.props.history.push("/owner/")}>
+                <button
+                  className="btn btn-danger"
+                  onClick={() => this.props.history.push("/owner/")}
+                >
                   Back
                 </button>
               </div>

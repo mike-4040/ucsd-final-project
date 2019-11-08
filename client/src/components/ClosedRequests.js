@@ -1,6 +1,8 @@
 import React from "react";
+import { timeFormat } from "../utils/settings";
 
 function ClosedRequests({ requests, handler }) {
+  
   return (
     <table className="table text-center table-hover ">
       <thead>
@@ -19,7 +21,7 @@ function ClosedRequests({ requests, handler }) {
             <td>{request.item}</td>
             <td>{request.priceFinal}</td>
             <td>{request.location}</td>
-            <td>{request.time}</td>
+            <td>{new Date(request.time).toLocaleString("en-US", timeFormat)}</td>
             <td>{request.winnerName}</td>
             <td>{request.winnerEmail}</td>
           </tr>
