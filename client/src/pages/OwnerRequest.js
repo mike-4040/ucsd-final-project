@@ -68,6 +68,7 @@ class OwnerRequest extends Component {
   }
 
   render() {
+                   console.log(this.state.request)
     return (
       <div className="container wrapper">
         {!this.state.request ? (
@@ -116,6 +117,9 @@ class OwnerRequest extends Component {
                       <li>Initial Price: {this.state.request.priceInitial}</li>
                       <li>Time: {this.state.request.time}</li>
                       <li>Location: {this.state.request.location}</li>
+                      <li>Contact: {this.state.request.renteeId.username}  email:
+                      <a href={this.state.request.renteeId.email}>{this.state.request.renteeId.email} </a> </li>
+
                     </ul>
                   </div>
                 </div>
@@ -142,6 +146,7 @@ class OwnerRequest extends Component {
                     className="btn btn-outline-danger"
                     type="button"
                     id="button-addon1"
+                    // visibility = {!this.state.request.closed ? "visible":"hidden"}
                     onClick={() => this.submitNewOffer()}
                   >
                     > Make an offer
