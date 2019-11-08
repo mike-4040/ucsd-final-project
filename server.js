@@ -219,8 +219,11 @@ app.get("/api/request/:requestId", isAuthenticated, (req, res) => {
 //get offers
 app.get("/api/offers/:requestId", isAuthenticated, (req, res) => {
   // console.log(req.params.requestId)
-  db.Offer.find({ requestId: req.params.requestId })
+  db.Offer
+    .find({ requestId: req.params.requestId })
+    .populate({path: "ownerId", select: "username -_id"})
     .then(data => {
+      console.log(data.toString());
       if (data) {
         res.json(data);
       } else {

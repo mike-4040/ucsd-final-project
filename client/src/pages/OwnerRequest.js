@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import withAuth from "./../components/withAuth";
 import API from "./../utils/API";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 // import { Link } from "react-router-dom";
 
 class OwnerRequest extends Component {
@@ -11,6 +13,18 @@ class OwnerRequest extends Component {
     minOffer: Infinity
   };
 
+ 
+  notify = () => {
+    toast.error(`⚠️Price should be less than $ ${this.state.minOffer} `, {
+      position: "top-left",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true
+      });
+  }
+
   handleChange = event => {
     const { name, value } = event.target;
     this.setState({
@@ -19,8 +33,7 @@ class OwnerRequest extends Component {
   };
 
   submitNewOffer = () => {
-    if (this.state.newOffer > this.state.minOffer - 1)
-      return alert("Offer should be at leatst $1 less than current best offer!");
+    if (this.state.newOffer > this.state.minOffer - 1) return this.notify();
     let objNewOffer = {
       requestId: this.props.match.params.requestId,
       ownerId: this.props.user.id,
@@ -81,7 +94,7 @@ class OwnerRequest extends Component {
             </div>
             <hr />
             <div className="row">
-            <div className="col-sm-12 col-md-12 col-lg-6">
+              <div className="col-sm-12 col-md-12 col-lg-6">
                 <h3>Offers:</h3>
                 <div className="card m-1 bg-light">
                   <div className="card-body d-flex justify-content-between">
@@ -134,6 +147,17 @@ class OwnerRequest extends Component {
                   >
                     > Make an offer
                   </button>
+                  <ToastContainer
+                    position="bottom-center"
+                    autoClose={3000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnVisibilityChange
+                    draggable
+                    pauseOnHover
+                  />
                 </div>
               </div>
             </div>

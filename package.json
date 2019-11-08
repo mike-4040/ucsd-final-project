@@ -33,6 +33,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.5.3",
     "morgan": "^1.9.1",
+    "react-toastify": "^5.4.0",
     "react-datetime-picker": "^2.7.1"
   }
 }
