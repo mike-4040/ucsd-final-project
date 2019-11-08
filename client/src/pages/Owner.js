@@ -26,7 +26,7 @@ class Owner extends Component {
       })
       .catch(console.log);
 
-    API.getOffersClosed(this.props.user.id)
+    API.getOwnerOffers(this.props.user.id)
       .then(res => {
         console.log("all offers")
         console.log(res.data.offers);
@@ -53,9 +53,9 @@ class Owner extends Component {
           <div className="col-sm-6 ">
             <h1>Recent Requests</h1>
           </div>
-          <div className="col-sm-6 text-right">
+          {/* <div className="col-sm-6 text-right">
             <button className="btn btn-danger">Test</button>
-          </div>
+          </div> */}
         </div>
         <div className="row">
           <div className="col-sm-12">
@@ -107,7 +107,8 @@ class Owner extends Component {
               </thead>
               <tbody>
                 {this.state.openOffers.map(openOffer => (
-                  <tr key={openOffer._id}>
+                  <tr key={openOffer._id}
+                  onClick={() => this.showreq(openOffer.requestId._id)}>
                     <td>{openOffer.requestId.item}</td>
                     <td>{openOffer.requestId.priceInitial}</td>
                     <td>{openOffer.price}</td>
@@ -143,7 +144,8 @@ class Owner extends Component {
               </thead>
               <tbody>
                 {this.state.closedOffers.map(closedOffer => (
-                  <tr key={closedOffer._id}>
+                  <tr key={closedOffer._id}
+                  onClick={() => this.showreq(closedOffer.requestId._id)}>
                     <td>{closedOffer.requestId.item}</td>
                     <td>{closedOffer.requestId.priceInitial}</td>
                     <td>{closedOffer.price}</td>

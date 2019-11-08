@@ -157,11 +157,12 @@ app.get("/api/offersOwner/:ownerId", isAuthenticated, (req, res) => {
 
   db.Offer
     .find({ ownerId: req.params.ownerId})
-    .populate({path: "requestId", select: "closed item priceInitial location time -_id"})
+    .populate({path: "requestId", select: "closed item priceInitial location time"})
     .then(offers => {
       if (offers) {
         // let offersClosed = offers.filter(offer => offer.requestId.closed);
-        console.log(offers);
+        //console.log(offers);
+       // console.log("owner Id", req.params.ownerId);
         // res.json({offers: offersClosed});
         res.json({offers: offers})
       } else {
@@ -239,7 +240,9 @@ app.post("/api/offers/", isAuthenticated, (req, res) => {
 //Route to view one request
 app.get("/api/owner/requests/:id", (req, res) => {
   //console.log(req.params.id)
-  db.Request.findById(req.params.id)
+  db.Request
+  .findById(req.params.id)
+  .populate({path: "renteeId", select: "email username"})
     .then(data => res.json({ request: data }))
     .catch(err => res.status(400).json(err));
 });
