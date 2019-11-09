@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import withAuth from "../components/withAuth";
 import API from "../utils/API";
+import { timeFormat } from "../utils/settings";
 // import { Link } from 'react-router-dom';
 
 class Owner extends Component {
@@ -28,8 +29,8 @@ class Owner extends Component {
 
     API.getOwnerOffers(this.props.user.id)
       .then(res => {
-        console.log("all offers");
-        console.log(res.data.offers);
+        // console.log("all offers");
+        // console.log(res.data.offers);
         this.setState({
           closedOffers:
             res.data.offers.filter(offer => offer.requestId.closed) || [],
@@ -46,8 +47,8 @@ class Owner extends Component {
 
   render() {
     //console.log(JSON.stringify(this.state, null, 2));
-    console.log("open offers");
-    console.log(this.state.openOffers);
+    // console.log("open offers");
+    // console.log(this.state.openOffers);
     return (
       <div className="container wrapper">
         <br />
@@ -79,7 +80,12 @@ class Owner extends Component {
                     <td>{request.item}</td>
                     <td>{request.priceInitial}</td>
                     <td>{request.location}</td>
-                    <td>{request.time} </td>
+                    <td>
+                      {new Date(request.time).toLocaleString(
+                        "en-US",
+                        timeFormat
+                      )}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -109,13 +115,20 @@ class Owner extends Component {
               </thead>
               <tbody>
                 {this.state.openOffers.map(openOffer => (
-                  <tr key={openOffer._id}
-                  onClick={() => this.showreq(openOffer.requestId._id)}>
+                  <tr
+                    key={openOffer._id}
+                    onClick={() => this.showreq(openOffer.requestId._id)}
+                  >
                     <td>{openOffer.requestId.item}</td>
                     <td>{openOffer.requestId.priceInitial}</td>
                     <td>{openOffer.price}</td>
                     <td>{openOffer.requestId.location}</td>
-                    <td>{openOffer.requestId.time}</td>
+                    <td>
+                      {new Date(openOffer.requestId.time).toLocaleString(
+                        "en-US",
+                        timeFormat
+                      )}
+                    </td>
                     {/* <td>{openOffer.isWinner ? "Winner" : "No"}</td>
                     <td>closedReqs.kostas</td>
                     <td>closedReqs.location.kostas@gmail.com</td> */}
@@ -146,13 +159,15 @@ class Owner extends Component {
               </thead>
               <tbody>
                 {this.state.closedOffers.map(closedOffer => (
-                  <tr key={closedOffer._id}
-                  onClick={() => this.showreq(closedOffer.requestId._id)}>
+                  <tr
+                    key={closedOffer._id}
+                    onClick={() => this.showreq(closedOffer.requestId._id)}
+                  >
                     <td>{closedOffer.requestId.item}</td>
                     <td>{closedOffer.requestId.priceInitial}</td>
                     <td>{closedOffer.price}</td>
                     <td>{closedOffer.requestId.location}</td>
-                    <td>{closedOffer.requestId.time}</td>
+                    <td>{new Date(closedOffer.requestId.time).toLocaleString("en-US", timeFormat)}</td>
                     <td>{closedOffer.isWinner ? "Winner" : "No"}</td>
                   </tr>
                 ))}

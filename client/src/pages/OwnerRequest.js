@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import withAuth from "./../components/withAuth";
 import API from "./../utils/API";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
+import { timeFormat } from "../utils/settings";
+
 // import { Link } from "react-router-dom";
 
 class OwnerRequest extends Component {
@@ -101,7 +102,11 @@ class OwnerRequest extends Component {
                     <ul>
                       {this.state.offers.map(offer => (
                         <li key={offer._id}>
-                          ${offer.price} {offer.createdAt}{" "}
+                          ${offer.price}{" "}
+                          {new Date(offer.createdAt).toLocaleString(
+                            "en-US",
+                            timeFormat
+                          )}{" "}
                         </li>
                       ))}
                     </ul>
@@ -115,7 +120,13 @@ class OwnerRequest extends Component {
                     <ul>
                       <li>Item: {this.state.request.item}</li>
                       <li>Initial Price: {this.state.request.priceInitial}</li>
-                      <li>Time: {this.state.request.time}</li>
+                      <li>
+                        Time:{" "}
+                        {new Date(this.state.request.time).toLocaleString(
+                          "en-US",
+                          timeFormat
+                        )}{" "}
+                      </li>
                       <li>Location: {this.state.request.location}</li>
                       <li>
                         Contact: {this.state.request.renteeId.username} email:
@@ -154,7 +165,6 @@ class OwnerRequest extends Component {
                   >
                     > Make an offer
                   </button>
-                  <ToastContainer />
                 </div>
               </div>
             </div>
