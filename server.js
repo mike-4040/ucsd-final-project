@@ -224,7 +224,7 @@ app.get("/api/offers/:requestId", isAuthenticated, (req, res) => {
     .find({ requestId: req.params.requestId })
     .populate({path: "ownerId", select: "username"})
     .then(data => {
-      console.log(data.toString());
+      // console.log(data.toString());
       if (data) {
         res.json(data);
       } else {
@@ -246,7 +246,12 @@ app.get("/api/owner/requests/:id", (req, res) => {
   db.Request
   .findById(req.params.id)
   .populate({path: "renteeId", select: "email username"})
-    .then(data => res.json({ request: data }))
+    .then(data =>{
+      console.log("we are heeeeee"+ data)
+      res.json({ request: data })
+    }
+    )
+
     .catch(err => res.status(400).json(err));
 });
 
@@ -271,9 +276,25 @@ app.get("/admin/offer", (req, res) => {
   seed.addOffers();
   res.send("Creating Offers");
 });
+//CANEL BID!
+app.put("/api/request-cancel/",isAuthenticated, (req, res) => {
+  db.Request.findOneAndUpdate(
+    { _id: req.body.requestId },
+    {
+      closed: true,
+      closedAt: Date.now(),
+      priceFinal: req.body.price,
+      canceled: req.body.canceled
+    },
+    { new: true }
+  )
+    .then(function(data) {
+      res.json(data);
+    })
+    .catch(err => res.status(400).json(err));
+});
 // UPDATE REQUEST ROUTE
 app.put("/api/request/", isAuthenticated, (req, res) => {
-  console.log("THIS IS MY LAST ONE KOSTAS TRUST ME!"+req.body)
   db.Request.findOneAndUpdate(
     { _id: req.body.requestId },
     {
@@ -286,7 +307,6 @@ app.put("/api/request/", isAuthenticated, (req, res) => {
     { new: true }
   )
     .then(function(data) {
-      // console.log(data)
       res.json(data);
     })
     .catch(err => res.status(400).json(err));
@@ -310,7 +330,6 @@ app.put("/api/offer/", isAuthenticated, (req, res) => {
 // Error handling
 app.use(function(err, req, res, next) {
   if (err.name === "UnauthorizedError") {
-    // Send the error rather than to show it on the console
     res.status(401).send(err);
   } else {
     next(err);
