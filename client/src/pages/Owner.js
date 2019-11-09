@@ -45,7 +45,7 @@ class Owner extends Component {
   };
 
   render() {
-    //console.log(JSON.stringify(this.state, null, 2));
+    console.log(JSON.stringify(this.state, null, 2));
     console.log("open offers");
     console.log(this.state.openOffers);
     return (

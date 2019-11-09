@@ -92,6 +92,8 @@ app.get("/api/requestsO/:renteeId", isAuthenticated, (req, res) => {
           numberOffers: request.numberOffers
         };
       });
+      console.log("/api/requestsO/:renteeId");
+      console.log(requestsClean);
       res.json(requestsClean);
     })
     .catch(err => {
@@ -141,7 +143,7 @@ app.get("/api/requests", isAuthenticated, (req, res) => {
       if (data) {
         res.json({ requests: data });
       } else {
-        res.status(404).send({ success: false, message: "No user found" });
+        res.status(404).send({ success: false, message: "No requests found" });
       }
     })
     .catch(err => res.status(400).send(err));
@@ -246,8 +248,12 @@ app.get("/api/owner/requests/:id", (req, res) => {
   db.Request
   .findById(req.params.id)
   .populate({path: "renteeId", select: "email username"})
-    .then(data => res.json({ request: data }))
-    .catch(err => res.status(400).json(err));
+  .then(data => {
+    console.log('"/api/owner/requests/:id"');
+    console.log(data.email);
+    res.json({ request: data })
+  })
+  .catch(err => res.status(400).json(err));
 });
 
 //ADMIN
