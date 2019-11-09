@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import withAuth from "./../components/withAuth";
 import API from "./../utils/API";
 import { ToastContainer, toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 // import { Link } from "react-router-dom";
 
 class OwnerRequest extends Component {
@@ -13,7 +13,6 @@ class OwnerRequest extends Component {
     minOffer: Infinity
   };
 
- 
   notify = () => {
     toast.error(`⚠️Price should be less than $ ${this.state.minOffer} `, {
       position: "top-left",
@@ -22,8 +21,8 @@ class OwnerRequest extends Component {
       closeOnClick: true,
       pauseOnHover: true,
       draggable: true
-      });
-  }
+    });
+  };
 
   handleChange = event => {
     const { name, value } = event.target;
@@ -69,7 +68,7 @@ class OwnerRequest extends Component {
   }
 
   render() {
-                   console.log(this.state.request)
+    // console.log(this.state.request);
     return (
       <div className="container wrapper">
         {!this.state.request ? (
@@ -118,9 +117,12 @@ class OwnerRequest extends Component {
                       <li>Initial Price: {this.state.request.priceInitial}</li>
                       <li>Time: {this.state.request.time}</li>
                       <li>Location: {this.state.request.location}</li>
-                      <li>Contact: {this.state.request.renteeId.username}  email:
-                      <a href={this.state.request.renteeId.email}>{this.state.request.renteeId.email} </a> </li>
-
+                      <li>
+                        Contact: {this.state.request.renteeId.username} email:
+                        <a href={this.state.request.renteeId.email}>
+                          {this.state.request.renteeId.email}{" "}
+                        </a>{" "}
+                      </li>
                     </ul>
                   </div>
                 </div>
@@ -154,17 +156,7 @@ class OwnerRequest extends Component {
                   >
                     > Make an offer
                   </button>
-                  <ToastContainer
-                    position="bottom-center"
-                    autoClose={3000}
-                    hideProgressBar={false}
-                    newestOnTop={false}
-                    closeOnClick
-                    rtl={false}
-                    pauseOnVisibilityChange
-                    draggable
-                    pauseOnHover
-                  />
+                  <ToastContainer />
                 </div>
               </div>
             </div>

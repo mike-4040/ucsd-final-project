@@ -3,7 +3,7 @@ import withAuth from "./../components/withAuth";
 import Card from "../components/Card";
 import API from "./../utils/API";
 import { ToastContainer, toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 
 class RequestInfo extends Component {
   state = {
@@ -20,14 +20,14 @@ class RequestInfo extends Component {
     canceled: false
   };
   notify = () => {
-    toast.warn('🦄 There are no offers, yet!', {
+    toast.warn("🦄 There are no offers, yet!", {
       position: "top-left",
       autoClose: 3000,
       hideProgressBar: false,
       closeOnClick: true,
       pauseOnHover: true,
       draggable: true
-      });
+    });
   };
 
   cancelBid = () => {
@@ -57,8 +57,9 @@ class RequestInfo extends Component {
         bestOffer = this.state.offers[i];
       }
     }
+    console.log("KOSTAS IT IS HERE " + bestOffer)
     //getting winner info
-    API.getUser(bestOffer.ownerId).then(response => {
+    API.getUser(bestOffer.ownerId._id).then(response => {
       this.setState({
         winnerEmail: response.data.email,
         winnerName: response.data.username
@@ -212,17 +213,7 @@ class RequestInfo extends Component {
         </div>
         <hr />
         {this.renderblock()}
-        <ToastContainer
-          position="top-left"
-          autoClose={3000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnVisibilityChange
-          draggable
-          pauseOnHover
-        />
+        <ToastContainer />
       </div>
     );
   }
