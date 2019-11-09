@@ -224,7 +224,7 @@ app.get("/api/offers/:requestId", isAuthenticated, (req, res) => {
   // console.log(req.params.requestId)
   db.Offer
     .find({ requestId: req.params.requestId })
-    .populate({path: "ownerId", select: "username -_id"})
+    .populate({path: "ownerId", select: "username"})
     .then(data => {
       console.log(data.toString());
       if (data) {
@@ -279,13 +279,14 @@ app.get("/admin/offer", (req, res) => {
 });
 // UPDATE REQUEST ROUTE
 app.put("/api/request/", isAuthenticated, (req, res) => {
+  console.log("THIS IS MY LAST ONE KOSTAS TRUST ME!"+req.body)
   db.Request.findOneAndUpdate(
     { _id: req.body.requestId },
     {
       closed: true,
       closedAt: Date.now(),
       priceFinal: req.body.price,
-      winnerId: req.body.ownerId,
+      winnerId: req.body.ownerId._id,
       canceled: req.body.canceled
     },
     { new: true }
