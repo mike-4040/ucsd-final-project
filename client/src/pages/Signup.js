@@ -46,7 +46,7 @@ class Signup extends Component {
     return (
       <div className="container ">
         <div className="row mt-5 d-flex justify-content-center">
-        <div class="col-sm-12 col-md-10 col-lg-6">
+        <div className="col-sm-12 col-md-10 col-lg-6">
             <div className="card">
               <div className="card-body">
                 <form className="m-3" onSubmit={this.handleFormSubmit}>

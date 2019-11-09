@@ -68,7 +68,7 @@ class OwnerRequest extends Component {
   }
 
   render() {
-                   console.log(this.state.request)
+    // console.log(this.state.request);
     return (
       <div className="container wrapper">
         {!this.state.request ? (
@@ -117,9 +117,12 @@ class OwnerRequest extends Component {
                       <li>Initial Price: {this.state.request.priceInitial}</li>
                       <li>Time: {this.state.request.time}</li>
                       <li>Location: {this.state.request.location}</li>
-                      <li>Contact: {this.state.request.renteeId.username}  email:
-                      <a href={this.state.request.renteeId.email}>{this.state.request.renteeId.email} </a> </li>
-
+                      <li>
+                        Contact: {this.state.request.renteeId.username} email:
+                        <a href={this.state.request.renteeId.email}>
+                          {this.state.request.renteeId.email}{" "}
+                        </a>{" "}
+                      </li>
                     </ul>
                   </div>
                 </div>
@@ -151,7 +154,7 @@ class OwnerRequest extends Component {
                   >
                     > Make an offer
                   </button>
-                  <ToastContainer/>
+                  <ToastContainer />
                 </div>
               </div>
             </div>

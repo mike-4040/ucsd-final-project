@@ -57,8 +57,9 @@ class RequestInfo extends Component {
         bestOffer = this.state.offers[i];
       }
     }
+    console.log("KOSTAS IT IS HERE " + bestOffer)
     //getting winner info
-    API.getUser(bestOffer.ownerId).then(response => {
+    API.getUser(bestOffer.ownerId._id).then(response => {
       this.setState({
         winnerEmail: response.data.email,
         winnerName: response.data.username

@@ -48,7 +48,7 @@ class NewRequest extends Component {
     return (
       <div className="container ">
         <div className="row justify-content-center">
-        <div class="col-sm-11  col-md-8 col-lg-7 wrapper">
+        <div className="col-sm-11  col-md-8 col-lg-7 wrapper">
             <br />
             <h1>Create new request</h1>
             <br />
