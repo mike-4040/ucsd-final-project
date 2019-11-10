@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link, Redirect } from "react-router-dom";
 import AuthService from "./../components/AuthService";
 import API from "./../utils/API";
-
+import {toast } from "react-toastify";
 class Signup extends Component {
   constructor() {
     super();
@@ -12,6 +12,16 @@ class Signup extends Component {
       email: "",
       username: ""
     };
+  }
+    notify = (err) => {
+    toast.error(` ${err}`, {
+      position: "top-center",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true
+    });
   }
 
   handleFormSubmit = event => {
@@ -31,7 +41,7 @@ class Signup extends Component {
         //   .then(res => window.location.replace(res.data.user.isOwner ? "/owner" : "/rentee"))
         //   .catch(err => alert(err.response.data.message));
       })
-      .catch(err => alert(err));
+      .catch(err =>  this.notify(" ⚠️Can not create new aacount, please fill out all fields."));
   };
 
   handleChange = event => {

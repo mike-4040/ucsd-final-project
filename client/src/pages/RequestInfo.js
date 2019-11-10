@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import withAuth from "./../components/withAuth";
 import Card from "../components/Card";
 import API from "./../utils/API";
-import { ToastContainer, toast } from "react-toastify";
+import {toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Request from '../components/Request';
 
@@ -59,7 +59,6 @@ class RequestInfo extends Component {
         bestOffer = this.state.offers[i];
       }
     }
-
     //getting winner info
     API.getUser(bestOffer.ownerId._id).then(response => {
       this.setState({
@@ -100,7 +99,6 @@ class RequestInfo extends Component {
         bestPrice: res.data[0].priceFinal,
         canceled: res.data[0].canceled
       });
-      // console.log(res.data)
     });
 
     API.getAllOffers(this.props.match.params.requestId).then(res => {
@@ -221,7 +219,6 @@ class RequestInfo extends Component {
         </div>
         <hr />
         {this.renderblock()}
-        <ToastContainer />
       </div>
     );
   }

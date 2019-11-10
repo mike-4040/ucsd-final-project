@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import AuthService from "./../components/AuthService";
 import { Link, Redirect } from "react-router-dom";
+import {toast } from "react-toastify";
 
 class Login extends Component {
   constructor() {
@@ -12,12 +13,25 @@ class Login extends Component {
     password: ""
   };
 
+  notify = (err) => {
+    toast.error(` ${err}`, {
+      position: "top-center",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true
+    });
+  };
+
   handleFormSubmit = event => {
     event.preventDefault();
 
     this.Auth.login(this.state.email, this.state.password)
       .then(res => window.location.replace(res.data.user.isOwner ? "/owner" : "/rentee"))
-      .catch(err => alert(err.response.data.message));
+      // .catch(err => this.notify(err.response.data.message))
+      .catch(err => this.notify("⚠️Can not find this user, please check your e-mail and password and try again."))
+
   };
 
   handleChange = event => {
@@ -28,8 +42,10 @@ class Login extends Component {
   };
 
   render() {
-    if (this.Auth.loggedIn()) {
-      return <Redirect to="/" />;
+    if (this.Auth.loggedIn() && this.Auth.getProfile().isOwner) {
+      return <Redirect to="/owner" />;
+    } else if (this.Auth.loggedIn() && !this.Auth.getProfile().isOwner) {
+      return <Redirect to="/rentee" />;
     }
     return (
       <div className="container ">
