@@ -4,6 +4,7 @@ import Card from "../components/Card";
 import API from "./../utils/API";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Request from '../components/Request';
 
 class RequestInfo extends Component {
   state = {
@@ -103,7 +104,6 @@ class RequestInfo extends Component {
     });
 
     API.getAllOffers(this.props.match.params.requestId).then(res => {
-      console.log(res.data);
       this.setState({
         offers: res.data
       });
@@ -203,13 +203,20 @@ class RequestInfo extends Component {
             </Card>
           </div>
           <div className="col-sm-12 col-md-12 col-lg-6">
-            <h3>Request information:</h3>
+            <Request
+              item={this.state.item}
+              priceInitial={this.state.priceInitial}
+              time={this.state.time}
+              location={this.state.location}
+            />
+
+            {/* <h3>Request information:</h3>
             <Card>
               <li>{this.state.item}</li>
               <li>{this.state.priceInitial}</li>
               <li>{new Date(this.state.time).toLocaleString()}</li>
               <li>{this.state.location}</li>
-            </Card>
+            </Card> */}
           </div>
         </div>
         <hr />
