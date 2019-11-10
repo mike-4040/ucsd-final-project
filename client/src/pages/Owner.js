@@ -103,9 +103,6 @@ class Owner extends Component {
                   <th scope="col">Bid</th>
                   <th scope="col">Location</th>
                   <th scope="col">Time</th>
-                  {/* <th scope="col">Winner</th>
-                  <th scope="col">Winner</th>
-                    <th scope="col">Contact</th> */}
                 </tr>
               </thead>
               <tbody>
@@ -124,9 +121,6 @@ class Owner extends Component {
                         timeFormat
                       )}
                     </td>
-                    {/* <td>{openOffer.isWinner ? "Winner" : "No"}</td>
-                    <td>closedReqs.kostas</td>
-                    <td>closedReqs.location.kostas@gmail.com</td> */}
                   </tr>
                 ))}
               </tbody>
