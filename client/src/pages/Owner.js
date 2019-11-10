@@ -5,18 +5,12 @@ import API from "../utils/API";
 
 class Owner extends Component {
   state = {
-    // username: "",
     requests: [],
     closedOffers: [],
     openOffers: []
   };
 
   componentDidMount() {
-    // API.getUser(this.props.user.id).then(res => {
-    //   this.setState({
-    //     username: res.data.username
-    //   });
-    // });
 
     API.getOwnerReqs()
       .then(res => {

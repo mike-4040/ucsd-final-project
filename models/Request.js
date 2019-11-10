@@ -55,10 +55,9 @@ const RequestSchema = new Schema(
 RequestSchema.virtual("priceBest", {
   ref: "Offer", // The model to use
   localField: "_id", // Find people where `localField`
-  foreignField: "requestId", // is equal to `foreignField`
-  justOne: true,
-  options: { sort: { price: 1 }, limit: 1 }
-});
+  foreignField: "requestId",
+  options: { sort: { price: 1 }}
+  });
 
 RequestSchema.virtual("numberOffers", {
   ref: "Offer",

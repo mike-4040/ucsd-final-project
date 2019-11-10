@@ -78,22 +78,22 @@ app.get("/api/user/:id", isAuthenticated, (req, res) => {
 app.get("/api/requestsO/:renteeId", isAuthenticated, (req, res) => {
   db.Request.find({ renteeId: req.params.renteeId, closed: false })
     .populate({ path: "priceBest" })
-    .then(renteeRequests => {
-      if (!renteeRequests)
+    .then(requests => {
+      if (!requests)
         res.status(404).send({ success: false, message: "No requests found" });
-      let requestsClean = renteeRequests.map(request => {
+
+      let requestsClean = requests.map(request => {
+
         return {
           _id: request._id,
           item: request.item,
           priceInitial: request.priceInitial,
           location: request.location,
           time: request.time,
-          priceBest: request.priceBest ? request.priceBest.price : null,
+          priceBest: request.priceBest[0] ? request.priceBest[0].price : null,
           numberOffers: request.numberOffers
         };
       });
-      console.log("/api/requestsO/:renteeId");
-      console.log(requestsClean);
       res.json(requestsClean);
     })
     .catch(err => {
