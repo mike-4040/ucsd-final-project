@@ -49,15 +49,16 @@ class RequestInfo extends Component {
       return this.notify();
     }
     let minprice = this.state.offers[0].price;
-    let bestOffer = {};
+    let bestOffer = this.state.offers[0];
     for (let i = 1; i < this.state.offers.length; i++) {
+
       let price = this.state.offers[i].price;
       if (price < minprice) {
         minprice = price;
         bestOffer = this.state.offers[i];
       }
     }
-    console.log("KOSTAS IT IS HERE " + bestOffer)
+
     //getting winner info
     API.getUser(bestOffer.ownerId._id).then(response => {
       this.setState({
@@ -108,11 +109,11 @@ class RequestInfo extends Component {
       });
     });
 
-    API.getUser(this.props.user.id).then(res => {
-      this.setState({
-        username: res.data.username
-      });
-    });
+    // API.getUser(this.props.user.id).then(res => {
+    //   this.setState({
+    //     username: res.data.username
+    //   });
+    // });
   }
 
   renderConfirmation() {
