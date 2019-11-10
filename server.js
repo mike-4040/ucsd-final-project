@@ -78,17 +78,19 @@ app.get("/api/user/:id", isAuthenticated, (req, res) => {
 app.get("/api/requestsO/:renteeId", isAuthenticated, (req, res) => {
   db.Request.find({ renteeId: req.params.renteeId, closed: false })
     .populate({ path: "priceBest" })
-    .then(renteeRequests => {
-      if (!renteeRequests)
+    .then(requests => {
+      if (!requests)
         res.status(404).send({ success: false, message: "No requests found" });
-      let requestsClean = renteeRequests.map(request => {
+
+      let requestsClean = requests.map(request => {
+
         return {
           _id: request._id,
           item: request.item,
           priceInitial: request.priceInitial,
           location: request.location,
           time: request.time,
-          priceBest: request.priceBest ? request.priceBest.price : null,
+          priceBest: request.priceBest[0] ? request.priceBest[0].price : null,
           numberOffers: request.numberOffers
         };
       });
@@ -141,7 +143,7 @@ app.get("/api/requests", isAuthenticated, (req, res) => {
       if (data) {
         res.json({ requests: data });
       } else {
-        res.status(404).send({ success: false, message: "No user found" });
+        res.status(404).send({ success: false, message: "No requests found" });
       }
     })
     .catch(err => res.status(400).send(err));
@@ -246,13 +248,13 @@ app.get("/api/owner/requests/:id", (req, res) => {
   db.Request
   .findById(req.params.id)
   .populate({path: "renteeId", select: "email username"})
-    .then(data =>{
-      console.log("we are heeeeee"+ data)
-      res.json({ request: data })
-    }
-    )
+  .then(data => {
+    console.log('"/api/owner/requests/:id"');
+    console.log(data.email);
+    res.json({ request: data })
+  })
+  .catch(err => res.status(400).json(err));
 
-    .catch(err => res.status(400).json(err));
 });
 
 //ADMIN

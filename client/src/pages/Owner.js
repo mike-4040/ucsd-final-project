@@ -6,18 +6,12 @@ import { timeFormat } from "../utils/settings";
 
 class Owner extends Component {
   state = {
-    // username: "",
     requests: [],
     closedOffers: [],
     openOffers: []
   };
 
   componentDidMount() {
-    // API.getUser(this.props.user.id).then(res => {
-    //   this.setState({
-    //     username: res.data.username
-    //   });
-    // });
 
     API.getOwnerReqs()
       .then(res => {
@@ -46,9 +40,10 @@ class Owner extends Component {
   };
 
   render() {
-    //console.log(JSON.stringify(this.state, null, 2));
-    // console.log("open offers");
-    // console.log(this.state.openOffers);
+    console.log(JSON.stringify(this.state, null, 2));
+    console.log("open offers");
+    console.log(this.state.openOffers);
+
     return (
       <div className="container wrapper">
         <br />

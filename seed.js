@@ -6,8 +6,8 @@ function addRentee() {
   for (let i = 0; i < numRentee; i++) {
     rentees.push({
       username: `Rentee ${i}`,
-      email: `rentee${i}@mail.com`,
-      password: 'password1',
+      email: `r${i}@m.com`,
+      password: 'qq',
       isOwner: false
     })
   }
@@ -65,8 +65,8 @@ function addOwner() {
   for (let i = 0; i < numOwners; i++) {
     owners.push({
       username: `Owner ${i}`,
-      email: `owner${i}@mail.com`,
-      password: 'password1',
+      email: `o${i}@m.com`,
+      password: 'qq',
       isOwner: true
     })
   }

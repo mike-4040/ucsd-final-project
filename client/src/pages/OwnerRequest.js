@@ -116,7 +116,8 @@ class OwnerRequest extends Component {
               <div className="col-sm-12 col-md-12 col-lg-6">
                 <h3>Request information:</h3>
                 <div className="card m-1 bg-light">
-                  <div className="card-body d-flex justify-content-between">
+                    <div className="card-body d-flex justify-content-between">
+                      {/* {this.state.} */}
                     <ul>
                       <li>Item: {this.state.request.item}</li>
                       <li>Initial Price: {this.state.request.priceInitial}</li>
