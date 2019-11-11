@@ -60,7 +60,6 @@ class NewRequest extends Component {
   };
   componentDidMount() {
     this.getCurrentTime()
-    console.log(new Date().getMinutes());
     API.getUser(this.props.user.id).then(res => {
       this.setState({
         username: res.data.username
