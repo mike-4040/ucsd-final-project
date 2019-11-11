@@ -75,7 +75,6 @@ RequestSchema.virtual("offers", {
   foreignField: "requestId"
 })
 
-
 const Request = mongoose.model("Request", RequestSchema);
 
 module.exports = Request;

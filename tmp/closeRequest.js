@@ -1,30 +1,30 @@
 const db = require("../models");
 
 function closeRequest(requestId) {
-  db.Request.findById(requestId)
-    .select("closed canceled")
-    .populate({ path: "offers", select: "price ownerId", sort: { price: 1 } })
-    .then(request => {
-      if (!request)
-        return { status: 1, message: "Request not found" };
-      if (request.closed === true)
-        return { status: 2, message: "Reques already closed" };
-      
-      let requestUpdate = { closed: true };
-        
-      if (request.offers.length) {
-        requestUpdate.priceFinal = request.offers[0].price;
-        requestUpdate.winnerId = request.offers[0].ownerId;
+  return new Promise((resolve, reject) => {
+    p = [];
+    console.log("Closing requests");
+    db.Request.findById(requestId)
+      .populate({ path: "offers", select: "price ownerId", sort: { price: 1 } })
+      .then(request => {
+        let requestUpdate = { closed: true };
 
-        db.Offer
-          .findByIdAndUpdate(request.offers[0]._id, { isWinner: true })
-          .catch(err => console.log(err));
-      }
-      
-      db.Request
-        .findByIdAndUpdate(requestId, requestUpdate)
-        .catch(err => console.log(err));
-    });
+        if (request.offers.length) {
+          const bestOffer = request.offers[0];
+          p.push(db.Offer.findByIdAndUpdate(bestOffer._id, { isWinner: true }));
+          requestUpdate.priceFinal = bestOffer.price;
+          requestUpdate.winnerId = bestOffer.ownerId;
+        } else {
+          requestUpdate.canceled = true;
+        }
+        p.push(db.Request.findByIdAndUpdate(request._id, requestUpdate));
+      });
+    Promise.all(p)
+      .then(result => resolve(result))
+      .catch(err => reject(new Error('can"n sorry' + err.message)));
+  })
+    .then(() => console.log("done"))
+    .catch(console.log);
 }
 
 module.exports = closeRequest;

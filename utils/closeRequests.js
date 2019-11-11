@@ -1,6 +1,6 @@
 const db = require("../models");
 
-const cutoffHours = 12;
+const cutoffHours = 6;
 
 function closeRequests() {
   return new Promise((resolve, reject) => {
