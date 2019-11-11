@@ -3,6 +3,7 @@ import withAuth from "./../components/withAuth";
 import API from "./../utils/API";
 import { toast } from "react-toastify";
 import { timeFormat } from "../utils/settings";
+import Offers from "./../components/Offers";
 
 // import { Link } from "react-router-dom";
 
@@ -90,7 +91,6 @@ class OwnerRequest extends Component {
   }
 
   render() {
-    // console.log(this.state.request);
     return (
       <div className="container wrapper">
         {!this.state.request ? (
@@ -115,22 +115,10 @@ class OwnerRequest extends Component {
             <hr />
             <div className="row">
               <div className="col-sm-12 col-md-12 col-lg-6">
-                <h3>Offers:</h3>
-                <div className="card m-1 bg-light">
-                  <div className="card-body d-flex justify-content-between">
-                    <ul>
-                      {this.state.offers.map(offer => (
-                        <li key={offer._id}>
-                          ${offer.price}{" "}
-                          {new Date(offer.createdAt).toLocaleString(
-                            "en-US",
-                            timeFormat
-                          )}{" "}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
+                  <h3>Offers:</h3>
+                  <Offers
+                    offers={this.state.offers}
+                    ownerId={this.props.user.id} />
               </div>
               <div className="col-sm-12 col-md-12 col-lg-6">
                 <h3>Request information:</h3>
