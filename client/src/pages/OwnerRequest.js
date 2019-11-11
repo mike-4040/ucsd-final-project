@@ -11,7 +11,9 @@ class OwnerRequest extends Component {
     request: null,
     offers: [],
     newOffer: "",
-    minOffer: Infinity
+    minOffer: Infinity,
+    winner: false,
+    canceled: false
   };
 
   notify = () => {
@@ -59,9 +61,28 @@ class OwnerRequest extends Component {
       })
       .catch(err => console.log(err));
   }
-
+  renderHeading = () => {
+    if (this.state.winner) {
+      return <h1>You have won this bid!</h1>;
+    } else if (this.state.canceled) {
+      return <h1>This request was canceled!</h1>;
+    } else if (this.state.request.closed) {
+      return <h1>This request is already closed</h1>;
+    } else {
+      return <h1>Make a bid!</h1>;
+    }
+  };
   componentDidMount() {
     API.getOwnerRequestById(this.props.match.params.requestId).then(res => {
+      console.log(res.data.request);
+      if (
+        res.data.request.closed &&
+        res.data.request.winnerId === this.props.user.id
+      ) {
+        this.setState({ winner: true });
+      } else if (res.data.request.canceled) {
+        this.setState({ canceled: true });
+      }
       this.setState({ request: res.data.request || null });
     });
 
@@ -89,9 +110,7 @@ class OwnerRequest extends Component {
             </div>
             <br />
             <div className="row">
-              <div className="col-lg-12">
-                <h1>Make a Bid!</h1>
-              </div>
+              <div className="col-lg-12">{this.renderHeading()}</div>
             </div>
             <hr />
             <div className="row">
@@ -116,8 +135,8 @@ class OwnerRequest extends Component {
               <div className="col-sm-12 col-md-12 col-lg-6">
                 <h3>Request information:</h3>
                 <div className="card m-1 bg-light">
-                    <div className="card-body d-flex justify-content-between">
-                      {/* {this.state.} */}
+                  <div className="card-body d-flex justify-content-between">
+                    {/* {this.state.} */}
                     <ul>
                       <li>Item: {this.state.request.item}</li>
                       <li>Initial Price: {this.state.request.priceInitial}</li>
@@ -142,8 +161,12 @@ class OwnerRequest extends Component {
             </div>
             <hr />
             <div className="row ">
-              <div className="col-sm-12 col-md-10 col-lg-6"
-               style = {{visibility: this.state.request.closed ? "hidden":"visible"}}>
+              <div
+                className="col-sm-12 col-md-10 col-lg-6"
+                style={{
+                  visibility: this.state.request.closed ? "hidden" : "visible"
+                }}
+              >
                 <div className="input-group mb-3">
                   <div className="input-group-prepend">
                     <span className="input-group-text">$</span>
