@@ -6,10 +6,11 @@ const mongoose = require("mongoose");
 const morgan = require("morgan");
 
 const db = require("./models");
-// const schedule = require("./utils/schedule"); // DO NOT REMOVE
+const schedule = require("./utils/schedule"); // DO NOT REMOVE
 const isAuthenticated = require("./config/isAuthenticated");
 const auth = require("./config/auth");
 const seed = require("./seed");
+const closseRequest = require('./utils/closeRequest');
 
 // Setting CORS so that any website can
 const PORT = process.env.PORT || 3001;
@@ -43,7 +44,8 @@ mongoose
   .then(() => console.log("MongoDB Connected!"))
   .catch(err => console.error(err));
 
-// schedule();                          //DO NOT REMOVE
+schedule();                        //DO NOT REMOVE
+// console.log(closseRequest());
 
 // LOGIN ROUTE
 app.post("/api/login", (req, res) => {

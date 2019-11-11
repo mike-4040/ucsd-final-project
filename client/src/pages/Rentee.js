@@ -30,7 +30,6 @@ class Rentee extends Component {
 
   render() {
 
-    console.log('Rentee, open Requests\n', this.state.requestsOpen)
     return (
       <div className="container wrapper">
         <div className="row">
