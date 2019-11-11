@@ -10,8 +10,7 @@ function closeRequest(requestId) {
       if (request.closed === true)
         return { status: 2, message: "Reques already closed" };
       
-      let requestUpdate = {}
-      requestUpdate = { closed: true };
+      let requestUpdate = { closed: true };
         
       if (request.offers.length) {
         requestUpdate.priceFinal = request.offers[0].price;

@@ -6,14 +6,13 @@ const mongoose = require("mongoose");
 const morgan = require("morgan");
 
 const db = require("./models");
-const schedule = require("./utils/schedule"); // DO NOT REMOVE
 const isAuthenticated = require("./config/isAuthenticated");
 const auth = require("./config/auth");
 const seed = require("./seed");
-const closseRequest = require('./utils/closeRequest');
+
+const PORT = process.env.PORT || 3001;
 
 // Setting CORS so that any website can
-const PORT = process.env.PORT || 3001;
 // Access our API
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -43,9 +42,6 @@ mongoose
   })
   .then(() => console.log("MongoDB Connected!"))
   .catch(err => console.error(err));
-
-schedule();                        //DO NOT REMOVE
-// console.log(closseRequest());
 
 // LOGIN ROUTE
 app.post("/api/login", (req, res) => {
@@ -85,7 +81,6 @@ app.get("/api/requestsO/:renteeId", isAuthenticated, (req, res) => {
         res.status(404).send({ success: false, message: "No requests found" });
 
       let requestsClean = requests.map(request => {
-
         return {
           _id: request._id,
           item: request.item,
@@ -164,10 +159,6 @@ app.get("/api/offersOwner/:ownerId", isAuthenticated, (req, res) => {
     .populate({path: "requestId", select: "closed item priceInitial location time"})
     .then(offers => {
       if (offers) {
-        // let offersClosed = offers.filter(offer => offer.requestId.closed);
-        //console.log(offers);
-       // console.log("owner Id", req.params.ownerId);
-        // res.json({offers: offersClosed});
         res.json({offers: offers})
       } else {
         res.status(404).send({ success: false, message: "No user found" });
@@ -180,12 +171,8 @@ app.get("/api/offersOwner/:ownerId", isAuthenticated, (req, res) => {
 //('/api/offer',newOffer
 app.post("/api/offer/", isAuthenticated, (req, res) => {
   db.Offer.create(req.body)
-    .then(data => {
-      res.json(data);
-    })
-    .catch(err => {
-      res.status(400).send(err.message);
-    });
+    .then(data => res.json(data))
+    .catch(err => res.status(400).send(err.message));
 });
 
 // Serve up static assets (usually on heroku)
@@ -201,12 +188,8 @@ app.get(
 //ROUTE FOR RENTEE NEW REQUEST
 app.post("/api/request/", isAuthenticated, (req, res) => {
   db.Request.create(req.body)
-    .then(data => {
-      res.json({ id: data._id });
-    })
-    .catch(err => {
-      res.status(400).send(err.message);
-    });
+    .then(data => res.json({ id: data._id }))
+    .catch(err => res.status(400).send(err.message));
 });
 
 //ROUTE TO GET SINGLE REQUEST FROM DATABASE
@@ -256,7 +239,6 @@ app.get("/api/owner/requests/:id", (req, res) => {
     res.json({ request: data })
   })
   .catch(err => res.status(400).json(err));
-
 });
 
 //ADMIN
