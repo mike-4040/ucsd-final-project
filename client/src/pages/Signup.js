@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link, Redirect } from "react-router-dom";
 import AuthService from "./../components/AuthService";
 import API from "./../utils/API";
-import {toast } from "react-toastify";
+import { toast } from "react-toastify";
 class Signup extends Component {
   constructor() {
     super();
@@ -13,7 +13,7 @@ class Signup extends Component {
       username: ""
     };
   }
-    notify = (err) => {
+  notify = err => {
     toast.error(` ${err}`, {
       position: "top-center",
       autoClose: 3000,
@@ -22,7 +22,7 @@ class Signup extends Component {
       pauseOnHover: true,
       draggable: true
     });
-  }
+  };
 
   handleFormSubmit = event => {
     event.preventDefault();
@@ -38,13 +38,19 @@ class Signup extends Component {
           .then(res => window.location.replace(res.data.user.isOwner ? "/owner" : "/rentee"))
           .catch(err => alert(err.response.data.message));
       })
-      .catch(err =>  this.notify(" ⚠️Can not create new aacount, please fill out all fields."));
+      .catch(err =>
+        this.notify(
+          err.response.data.code === 11000
+            ? " ⚠️This e-mail already exists, Please Log in with your e-mail"
+            : "⚠️Can not create new acount, please fill out all fields."
+        )
+      );
   };
 
   handleChange = event => {
     const { name, value } = event.target;
     // if (name === "isOwner") this.setState({ isOwner: !this.state.isOwner });
-    // else 
+    // else
     this.setState({ [name]: value });
   };
 
@@ -56,23 +62,32 @@ class Signup extends Component {
     return (
       <div className="container ">
         <div className="row mt-5 d-flex justify-content-center">
-        <div className="col-sm-12 col-md-10 col-lg-6">
+          <div className="col-sm-12 col-md-10 col-lg-6">
             <div className="card">
               <div className="card-body">
                 <form className="m-3" onSubmit={this.handleFormSubmit}>
                   <div className="form-group">
                     <h1 className="p-1">Create new account</h1>
-                    <div className="btn-group mb-4 btn-group-toggle" data-toggle="buttons" role="group">
+                    <div
+                      className="btn-group mb-4 btn-group-toggle"
+                      data-toggle="buttons"
+                      role="group"
+                    >
                       <button
                         onClick={() => this.setState({ isOwner: false })}
                         type="button"
-                        className={this.state.isOwner ? "btn btn-light" : "btn btn-dark"}>
+                        className={
+                          this.state.isOwner ? "btn btn-light" : "btn btn-dark"
+                        }
+                      >
                         Looking for Surfboard
                       </button>
                       <button
                         onClick={() => this.setState({ isOwner: true })}
                         type="button"
-                        className={!this.state.isOwner ? "btn btn-light" : "btn btn-dark"}
+                        className={
+                          !this.state.isOwner ? "btn btn-light" : "btn btn-dark"
+                        }
                       >
                         Renting Surfboards
                       </button>
@@ -116,10 +131,7 @@ class Signup extends Component {
                       >
                         Sign up
                       </button>{" "}
-                      <span id="separator">
-                        {" "}
-                        or{" "}
-                      </span>{" "}
+                      <span id="separator"> or </span>{" "}
                       <Link to="/login">
                         <button id="logIn" className="btn  btn-light m-1">
                           Log In
