@@ -26,7 +26,6 @@ class Signup extends Component {
 
   handleFormSubmit = event => {
     event.preventDefault();
-    console.log(this.state);
     API.signUpUser(
       this.state.username,
       this.state.email,
@@ -34,9 +33,10 @@ class Signup extends Component {
       this.state.isOwner
     )
       .then(res => {
-        // once the user has signed up
-        // send them to the login page
-        this.props.history.replace("/login");
+        this.Auth
+          .login(this.state.email, this.state.password)
+          .then(res => window.location.replace(res.data.user.isOwner ? "/owner" : "/rentee"))
+          .catch(err => alert(err.response.data.message));
       })
       .catch(err =>
         this.notify(

@@ -1,9 +1,12 @@
 import React, { Component } from "react";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import withAuth from "./../components/withAuth";
 import Card from "../components/Card";
 import API from "./../utils/API";
-import {toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import Request from "../components/Request";
+import { timeFormat } from "../utils/settings";
 
 class RequestInfo extends Component {
   state = {
@@ -49,7 +52,7 @@ class RequestInfo extends Component {
       return this.notify();
     }
     let minprice = this.state.offers[0].price;
-    let bestOffer = {};
+    let bestOffer = this.state.offers[0];
     for (let i = 1; i < this.state.offers.length; i++) {
       let price = this.state.offers[i].price;
       if (price < minprice) {
@@ -104,12 +107,6 @@ class RequestInfo extends Component {
         offers: res.data
       });
     });
-
-    API.getUser(this.props.user.id).then(res => {
-      this.setState({
-        username: res.data.username
-      });
-    });
   }
 
   renderConfirmation() {
@@ -119,15 +116,13 @@ class RequestInfo extends Component {
           <h3>Confirmation:</h3>
           <Card>
             <li>
-              Winner is {this.state.winnerName} with $ {this.state.bestPrice}{" "}
-              bid!
+              Winner is {this.state.winnerName} with $ {this.state.bestPrice} bid!
             </li>
             <li>
               {" "}
-              {this.state.winnerName}, is going to provide you with{" "}
-              {this.state.item} surf board on{" "}
-              {new Date(this.state.time).toLocaleString()} at{" "}
-              {this.state.location}
+              {this.state.winnerName}, is going to provide you with {this.state.item} surf board on{" "}
+              {new Date(this.state.time).toLocaleString("en-US",
+                        timeFormat)} at {this.state.location}
             </li>
             <li>
               {" "}
@@ -177,10 +172,7 @@ class RequestInfo extends Component {
         <div className="row">
           <div className="col-sm-12">
             <br />
-            <button
-              onClick={() => this.props.history.push("/rentee/")}
-              className="btn btn-danger"
-            >
+            <button onClick={() => this.props.history.push("/rentee/")} className="btn btn-danger">
               Back
             </button>
           </div>
@@ -199,13 +191,12 @@ class RequestInfo extends Component {
             </Card>
           </div>
           <div className="col-sm-12 col-md-12 col-lg-6">
-            <h3>Request information:</h3>
-            <Card>
-              <li>{this.state.item}</li>
-              <li>{this.state.priceInitial}</li>
-              <li>{new Date(this.state.time).toLocaleString()}</li>
-              <li>{this.state.location}</li>
-            </Card>
+            <Request
+              item={this.state.item}
+              priceInitial={this.state.priceInitial}
+              time={this.state.time}
+              location={this.state.location}
+            />
           </div>
         </div>
         <hr />

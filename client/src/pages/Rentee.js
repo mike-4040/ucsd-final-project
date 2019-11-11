@@ -6,15 +6,15 @@ import ClosedRequests from "../components/ClosedRequests";
 
 class Rentee extends Component {
   state = {
-    username: "",
+    // username: "",
     requestsOpen: [],
     requestsClosed: []
   };
 
   componentDidMount() {
-    API.getUser(this.props.user.id).then(res =>
-      this.setState({ username: res.data.username })
-    );
+    // API.getUser(this.props.user.id).then(res =>
+    //   this.setState({ username: res.data.username })
+    // );
     API.getRenteeReqsOpen(this.props.user.id).then(res =>
       this.setState({ requestsOpen: res.data })
     );
@@ -29,6 +29,7 @@ class Rentee extends Component {
   };
 
   render() {
+
     return (
       <div className="container wrapper">
         <div className="row">

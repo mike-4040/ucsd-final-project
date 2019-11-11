@@ -8,23 +8,25 @@ function closeRequests() {
 
   db.Request.find({ closed: false, time: { $lt: timeLimit } })
     .select("renteeId time")
-    .populate({ path: "offers", select: "price", sort: { price: 1 } })
+    .populate({ path: "offers", select: "price ownerId", sort: { price: 1 } })
     .then(requests => {
       requests.forEach(request => {
-        let requestUpdate = { closed: true };
+        let requestUpdate = { closed: true, canceled: true };
         
         if (request.offers.length) {
           db.Offer
             .findByIdAndUpdate(request.offers[0]._id, { isWinner: true })
             .catch(err => console.log(err));
-
-          requestUpdate.priceFinal = request.offers.price;
-          requestUpdate.winnerId = request.offers.ownerId;
+         
+          requestUpdate.priceFinal = request.offers[0].price;
+          requestUpdate.winnerId = request.offers[0].ownerId;
+          requestUpdate.canceled = false;
         }
-      
+
         db.Request
           .findByIdAndUpdate(request._id, requestUpdate)
-          .catch(err => console.log(err))
+          .catch(err => console.log(err));
+        
       });
     });
 }

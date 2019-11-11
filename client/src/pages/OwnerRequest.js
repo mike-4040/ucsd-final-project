@@ -116,7 +116,8 @@ class OwnerRequest extends Component {
               <div className="col-sm-12 col-md-12 col-lg-6">
                 <h3>Request information:</h3>
                 <div className="card m-1 bg-light">
-                  <div className="card-body d-flex justify-content-between">
+                    <div className="card-body d-flex justify-content-between">
+                      {/* {this.state.} */}
                     <ul>
                       <li>Item: {this.state.request.item}</li>
                       <li>Initial Price: {this.state.request.priceInitial}</li>
@@ -141,7 +142,8 @@ class OwnerRequest extends Component {
             </div>
             <hr />
             <div className="row ">
-              <div className="col-sm-12 col-md-10 col-lg-6">
+              <div className="col-sm-12 col-md-10 col-lg-6"
+               style = {{visibility: this.state.request.closed ? "hidden":"visible"}}>
                 <div className="input-group mb-3">
                   <div className="input-group-prepend">
                     <span className="input-group-text">$</span>
@@ -155,12 +157,13 @@ class OwnerRequest extends Component {
                     placeholder="Can you give lower price?"
                     aria-label="Example text with button addon"
                     aria-describedby="button-addon1"
+                    // style = {{visibility: this.state.request.closed ? "hidden":"visible"}}
                   />
                   <button
                     className="btn btn-outline-danger"
                     type="button"
                     id="button-addon1"
-                    // visibility = {!this.state.request.closed ? "visible":"hidden"}
+                    // style = {{visibility: this.state.request.closed ? "hidden":"visible"}}
                     onClick={() => this.submitNewOffer()}
                   >
                     > Make an offer
