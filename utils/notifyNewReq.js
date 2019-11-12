@@ -24,8 +24,7 @@ function notifyNewReq(request) {
           }
         };
       });
-      console.log(emails);
-      // sgMail.send(emails);
+      sgMail.send(emails);
     });
 }
 
