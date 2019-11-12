@@ -1,5 +1,6 @@
 const db = require("../models");
 const isAuthenticated = require("../config/isAuthenticated");
+const notifyNewReq = require("../utils/notifyNewReq")
 
 module.exports = function (app) {
 
@@ -75,7 +76,10 @@ module.exports = function (app) {
 
   app.post("/api/request/", isAuthenticated, (req, res) => {
     db.Request.create(req.body)
-      .then(data => res.json({ id: data._id }))
+      .then(data => {
+        notifyNewReq(data);
+        res.json({ id: data._id })
+      })
       .catch(err => res.status(400).send(err.message));
   });
   

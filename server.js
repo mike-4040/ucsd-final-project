@@ -64,7 +64,6 @@ app.get("/api/user/:id", isAuthenticated, (req, res) => {
 
 require("./routes/request")(app);
 
-//api/owner/closedrequests
 app.get("/api/offersOwner/:ownerId", isAuthenticated, (req, res) => {
   if (!req.user.isOwner) {
     return res.status(403).send("Must be an owner.");
