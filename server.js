@@ -29,7 +29,8 @@ app.use(express.urlencoded({ extended: true }));
 if (process.env.NODE_ENV === "production")
   app.use(express.static("client/build"));
 
-const connectionString = process.env.MONGODB_URI || "mongodb://localhost:27017/appDB";
+const connectionString =
+  process.env.MONGODB_URI || "mongodb://localhost:27017/appDB";
 
 mongoose
   .connect(connectionString, connectionOptions)
@@ -48,7 +49,6 @@ app.post("/api/signup", (req, res) => {
     .then(data => res.json(data))
     .catch(err => res.status(400).json(err));
 });
-
 
 app.get("/api/user/:id", isAuthenticated, (req, res) => {
   db.User.findById(req.params.id)
@@ -69,55 +69,57 @@ app.get("/api/offersOwner/:ownerId", isAuthenticated, (req, res) => {
   if (!req.user.isOwner) {
     return res.status(403).send("Must be an owner.");
   }
-
-  db.Offer.find({ ownerId: req.params.ownerId })
-    .populate({ path: "requestId", select: "closed item priceInitial location time" })
+  // db.Offer.find({ ownerId: req.params.ownerId, isBest: true })
+  db.Offer.find({ ownerId: req.params.ownerId})  
+    .populate({
+      path: "requestId",
+      select: "closed item priceInitial location time"
+    })
     .then(offers => {
-      if (offers)
-        res.json({ offers: offers });
-      else
-        res.status(404).send({ success: false, message: "No offers found" });
+      // console.log(offers);
+      if (offers) res.json({ offers: offers });
+      else res.status(404).send({ success: false, message: "No offers found" });
     })
     .catch(err => res.status(400).send(err));
 });
 
-
-app.post("/api/offer/", isAuthenticated, (req, res) =>
-  db.Offer.create(req.body)
-    .then(data => res.json(data))
-    .catch(err => res.status(400).send(err.message))
-);
-
-app.post("/api/offers/", isAuthenticated, (req, res) => 
-  db.Offer.create(req.body)
-    .then(data => res.json(data))
-    .catch(err => res.status(400).json(err))
-);
+app.post("/api/offer/", isAuthenticated, (req, res) => {
+  db.Offer.updateMany({ requestId: req.body.requestId }, { isBest: false })
+    .then(result => {
+      db.Offer.create(req.body)
+        .then(data => res.json(data))
+        .catch(err => res.status(400).send(err.message));
+    })
+    .catch(err => res.status(400).json(err));
+});
 
 // Serve up static assets (usually on heroku)
 
-app.get("/", isAuthenticated /* Using the express jwt MW here */, (req, res) => {
-  res.send("You are authenticated"); //Sending some response when authenticated
-});
+app.get(
+  "/",
+  isAuthenticated /* Using the express jwt MW here */,
+  (req, res) => {
+    res.send("You are authenticated"); //Sending some response when authenticated
+  }
+);
 
 //get offers
 app.get("/api/offers/:requestId", isAuthenticated, (req, res) =>
-  db.Offer
-    .find({ requestId: req.params.requestId })
+  db.Offer.find({ requestId: req.params.requestId })
     .populate({ path: "ownerId", select: "username" })
     .then(data => {
-      if (data)
-        res.json(data);
+      if (data) res.json(data);
       else
-        res.status(404).send({ success: false, message: "No offers for this request" });
+        res
+          .status(404)
+          .send({ success: false, message: "No offers for this request" });
     })
     .catch(err => res.status(400).send(err))
 );
 
 //Route to view one request
 app.get("/api/owner/requests/:id", (req, res) =>
-  db.Request
-    .findById(req.params.id)
+  db.Request.findById(req.params.id)
     .populate({ path: "renteeId", select: "email username" })
     .then(data => res.json({ request: data }))
     .catch(err => res.status(400).json(err))
@@ -128,8 +130,7 @@ require("./routes/admin")(app);
 
 //CANEL Request
 app.put("/api/request-cancel/", isAuthenticated, (req, res) => {
-  db.Request
-    .findOneAndUpdate(
+  db.Request.findOneAndUpdate(
     { _id: req.body.requestId },
     {
       closed: true,
