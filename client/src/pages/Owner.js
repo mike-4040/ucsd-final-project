@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import withAuth from "../components/withAuth";
 import API from "../utils/API";
 import { timeFormat } from "../utils/settings";
-// import { Link } from 'react-router-dom';
 
 class Owner extends Component {
   state = {
@@ -48,9 +47,6 @@ class Owner extends Component {
           <div className="col-sm-6 ">
             <h1>Recent Requests</h1>
           </div>
-          {/* <div className="col-sm-6 text-right">
-            <button className="btn btn-danger">Test</button>
-          </div> */}
         </div>
         <div className="row">
           <div className="col-sm-12 col-md-12 col-lg-12 table-responsive">
