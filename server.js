@@ -68,18 +68,52 @@ app.get("/api/offersOwner/:ownerId", isAuthenticated, (req, res) => {
   if (!req.user.isOwner) {
     return res.status(403).send("Must be an owner.");
   }
-  // db.Offer.find({ ownerId: req.params.ownerId, isBest: true })
-  db.Offer.find({ ownerId: req.params.ownerId})  
-    .populate({
+  db.Offer.aggregate([
+    {
+      $match: {
+        ownerId: mongoose.Types.ObjectId(req.params.ownerId)
+      }
+    },
+    {
+      $group: {
+        _id: "$requestId",
+        offers: { $push: "$$ROOT" }
+      }
+    },
+    {
+      $project: {
+        item: {
+          $reduce: {
+            input: "$offers",
+            initialValue: "$offers.0",
+            in: {
+              $cond: {
+                if: {
+                  $lt: ["$$value.price", "$$this.price"]
+                },
+                then: "$$value",
+                else: "$$this"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      $replaceRoot: { newRoot: "$item" }
+    }
+  ]).then(result => {
+    db.Request.populate(result, {
       path: "requestId",
       select: "closed item priceInitial location time"
     })
-    .then(offers => {
-      // console.log(offers);
-      if (offers) res.json({ offers: offers });
-      else res.status(404).send({ success: false, message: "No offers found" });
-    })
-    .catch(err => res.status(400).send(err));
+      .then(offers => {
+        if (offers) res.json({ offers });
+        else
+          res.status(404).send({ success: false, message: "No offers found" });
+      })
+      .catch(err => res.status(400).send(err));
+  });
 });
 
 app.post("/api/offer/", isAuthenticated, (req, res) => {

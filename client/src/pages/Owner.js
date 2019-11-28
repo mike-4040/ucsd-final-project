@@ -11,7 +11,6 @@ class Owner extends Component {
   };
 
   componentDidMount() {
-
     API.getOwnerReqs()
       .then(res => {
         this.setState({
@@ -39,7 +38,6 @@ class Owner extends Component {
   };
 
   render() {
-
     return (
       <div className="container wrapper">
         <br />
@@ -92,10 +90,11 @@ class Owner extends Component {
               <thead>
                 <tr>
                   <th scope="col">Items</th>
-                  <th scope="col">Price</th>
-                  <th scope="col">Bid</th>
+                  <th scope="col">Starting Price</th>
+                  <th scope="col">Your Best Price</th>
                   <th scope="col">Location</th>
                   <th scope="col">Time</th>
+                  <th scope="col">Winner</th>
                 </tr>
               </thead>
               <tbody>
@@ -114,6 +113,7 @@ class Owner extends Component {
                         timeFormat
                       )}
                     </td>
+                    <td>{openOffer.isBest ? "Winning" : "Loosing"}</td>
                   </tr>
                 ))}
               </tbody>
@@ -132,8 +132,8 @@ class Owner extends Component {
               <thead>
                 <tr>
                   <th scope="col">Items</th>
-                  <th scope="col">Price</th>
-                  <th scope="col">Bid</th>
+                  <th scope="col">Starting Price</th>
+                  <th scope="col">Your Best Price</th>
                   <th scope="col">Location</th>
                   <th scope="col">Time</th>
                   <th scope="col">Winner</th>
@@ -149,7 +149,12 @@ class Owner extends Component {
                     <td>{closedOffer.requestId.priceInitial}</td>
                     <td>{closedOffer.price}</td>
                     <td>{closedOffer.requestId.location}</td>
-                    <td>{new Date(closedOffer.requestId.time).toLocaleString("en-US", timeFormat)}</td>
+                    <td>
+                      {new Date(closedOffer.requestId.time).toLocaleString(
+                        "en-US",
+                        timeFormat
+                      )}
+                    </td>
                     <td>{closedOffer.isWinner ? "Winner" : "No"}</td>
                   </tr>
                 ))}
