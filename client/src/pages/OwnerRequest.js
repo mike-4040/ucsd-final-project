@@ -40,7 +40,8 @@ class OwnerRequest extends Component {
     let objNewOffer = {
       requestId: this.props.match.params.requestId,
       ownerId: this.props.user.id,
-      price: this.state.newOffer
+      price: this.state.newOffer,
+      isBest: true
     };
     // API.
     API.newOffer(objNewOffer)
